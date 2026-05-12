@@ -17,8 +17,12 @@
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+
+/* TOAST */
 #toast{position:fixed;top:18px;right:18px;z-index:9999;background:var(--card2);border:1px solid var(--p);border-radius:12px;padding:10px 18px;font-size:13px;transform:translateY(-70px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;max-width:320px;font-family:var(--fm);pointer-events:none}
 #toast.show{transform:translateY(0);opacity:1}
+
+/* AUTH */
 #auth{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .5s}
 #auth.gone{opacity:0;pointer-events:none}
 #auth::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 80%,rgba(139,124,248,.13) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 20%,rgba(244,114,182,.09) 0%,transparent 60%);pointer-events:none}
@@ -38,8 +42,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .gpill.on{background:rgba(139,124,248,.18);border-color:var(--p);color:var(--p2)}
 .btn{width:100%;padding:13px;background:var(--p);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fb);transition:opacity .2s,transform .1s;margin-top:5px}
 .btn:hover{opacity:.88}.btn:active{transform:scale(.98)}
+
+/* APP */
 #app{display:none;height:100vh;flex-direction:column;position:relative;z-index:1}
 #app.on{display:flex}
+
+/* TOPBAR */
 .topbar{display:flex;align-items:center;gap:9px;padding:10px 18px;background:rgba(6,6,14,.94);border-bottom:1px solid var(--bdr);backdrop-filter:blur(16px);flex-shrink:0}
 .tlogo{font-family:var(--fd);font-size:25px;color:var(--p2);letter-spacing:-2px;margin-right:4px}
 .tlogo em{color:var(--pink);font-style:italic}
@@ -52,11 +60,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .tname{font-size:13px;color:var(--text2);font-weight:500}
 .sbtn{background:none;border:1px solid var(--bdr);border-radius:8px;color:var(--text2);font-size:12px;padding:5px 10px;cursor:pointer;font-family:var(--fb);transition:.2s}
 .sbtn:hover{border-color:var(--p);color:var(--p)}
+
+/* BODY LAYOUT */
 .body{display:flex;flex:1;overflow:hidden}
 .side{width:252px;background:var(--bg2);border-right:1px solid var(--bdr);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
 .ssec{padding:14px 16px;border-bottom:1px solid var(--bdr)}
 .stitle{font-family:var(--fm);font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:11px}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* WEATHER */
 .wcard{background:var(--card2);border-radius:13px;padding:13px;border:1px solid var(--bdr)}
 .wtemp{font-family:var(--fd);font-size:48px;color:var(--text);line-height:1;letter-spacing:-3px}
 .wcity{font-size:12px;color:var(--text2);margin-top:3px;font-weight:600}
@@ -70,6 +82,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .tlbl{font-size:13px;font-weight:700}
 .tdesc{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* PREF BARS */
 .prow{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 .plbl{font-size:11px;color:var(--text2);width:82px;flex-shrink:0;font-family:var(--fm)}
 .ptrack{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
@@ -79,6 +93,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .mpill{padding:9px 12px;border-radius:10px;background:var(--card);border:1px solid var(--bdr);font-size:12px;cursor:pointer;color:var(--text2);transition:.2s;font-weight:500}
 .mpill.on{background:rgba(139,124,248,.1);border-color:rgba(139,124,248,.4);color:var(--p2)}
 .mpill:hover:not(.on){border-color:var(--bdr2);color:var(--text)}
+
+/* NOW PLAYING */
 .np{padding:16px 20px;border-bottom:1px solid var(--bdr);background:linear-gradient(180deg,var(--bg3),var(--bg2));flex-shrink:0}
 .np-hdr{font-family:var(--fm);font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:12px}
 .np-row{display:flex;align-items:center;gap:15px}
@@ -103,6 +119,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .abtn.liked{border-color:rgba(244,114,182,.45);color:var(--pink)}
 .abtn.yt-btn{border-color:rgba(255,0,0,.35);color:#ff6060}
 .abtn.yt-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* CONTROLS */
 .ctrl{padding:13px 20px;background:var(--bg);border-top:1px solid var(--bdr);flex-shrink:0}
 .progbar{width:100%;height:4px;background:var(--bg4);border-radius:2px;cursor:pointer;margin-bottom:5px;position:relative;transition:height .15s}
 .progbar:hover{height:6px}
@@ -117,17 +135,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px
 .cplay:active{transform:scale(.95)}
 .volw{display:flex;align-items:center;gap:7px;margin-left:auto}
 input[type=range]{accent-color:var(--p);cursor:pointer}
+
+/* FEED */
 .feed{flex:1;overflow-y:auto;padding:14px 18px}
 .ftabs{display:flex;gap:3px;background:var(--bg3);border-radius:12px;padding:3px;margin-bottom:14px;width:fit-content}
 .ftab{padding:7px 15px;border-radius:10px;font-size:12px;cursor:pointer;color:var(--text2);transition:.2s;border:none;background:none;font-family:var(--fb);font-weight:600}
 .ftab.on{background:var(--p);color:#fff}
+
+/* STATUS */
 .sbar{display:flex;align-items:center;gap:9px;border-radius:11px;padding:10px 14px;margin-bottom:12px;font-size:12px;font-family:var(--fm);transition:all .3s}
 .sbar.info{background:rgba(139,124,248,.08);border:1px solid rgba(139,124,248,.2);color:var(--p2)}
 .sbar.ok{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal)}
 .sbar.err{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:var(--red)}
+
+/* YT EMBED */
 .yt-wrap{border-radius:14px;overflow:hidden;margin-bottom:12px;border:1px solid var(--bdr);background:#000;display:none}
 .yt-wrap.on{display:block}
 .yt-wrap iframe{width:100%;height:195px;border:none;display:block}
+
+/* QUEUE */
 .qlist{display:flex;flex-direction:column;gap:6px}
 .qitem{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:12px;padding:10px 13px;cursor:pointer;transition:background .15s,border-color .15s;border:1px solid transparent}
 .qitem:hover{background:var(--card2);border-color:var(--bdr)}
@@ -140,6 +166,8 @@ input[type=range]{accent-color:var(--p);cursor:pointer}
 .qart{font-size:11px;color:var(--text2);margin-top:2px;font-family:var(--fm)}
 .qlike{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:3px;transition:color .2s}
 .qlike.on{color:var(--pink)}
+
+/* AI BUBBLES */
 .aibub{background:var(--card2);border:1px solid var(--bdr);border-radius:15px;padding:15px 17px;margin-bottom:9px;position:relative;overflow:hidden}
 .aibub::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--p),var(--pink))}
 .ai-hdr{display:flex;align-items:center;gap:7px;margin-bottom:8px}
@@ -162,28 +190,217 @@ input[type=range]{accent-color:var(--p);cursor:pointer}
 .chatsend{background:var(--p);border:none;border-radius:11px;color:#fff;padding:10px 15px;cursor:pointer;font-family:var(--fb);font-size:13px;font-weight:700;transition:opacity .2s}
 .chatsend:disabled{opacity:.3;cursor:not-allowed}
 .chatsend:not(:disabled):hover{opacity:.85}
+
+/* PREFS */
 .psec{margin-bottom:20px}
 .ptitle{font-size:15px;font-weight:700;margin-bottom:11px}
 .empty{text-align:center;color:var(--text3);font-size:13px;padding:26px;font-family:var(--fm)}
+
+/* WAVEFORM VISUALIZER */
 #visualizer{display:flex;align-items:flex-end;gap:2px;height:40px;padding:0 2px;margin-bottom:4px}
 .vbar{flex:1;background:linear-gradient(180deg,var(--p2),var(--pink));border-radius:2px 2px 0 0;min-height:3px;transition:height .1s}
+
+/* API CONFIG */
 .api-config{border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px}
 select{background:var(--bg3);border:1px solid var(--bdr);border-radius:11px;padding:8px;color:var(--text);font-family:var(--fb);width:100%;margin-bottom:12px}
 </style>
 </head>
 <body>
-<div id="toast"></div>
-<div id="auth"><div class="abox"><div class="alogo">A<em>I</em>R</div><div class="atag">Rádio inteligente · DJ powered by IA</div><div class="tabs"><button class="tab on" onclick="switchTab('login',this)">Entrar</button><button class="tab" onclick="switchTab('reg',this)">Cadastrar</button></div><div id="frm-login"><input class="inp" id="l-email" type="email" placeholder="seu@email.com" value="demo@air.fm"><input class="inp" id="l-pass" type="password" placeholder="Senha" value="123456"><button class="btn" onclick="doLogin()">Sintonizar →</button></div><div id="frm-reg" style="display:none"><input class="inp" id="r-name" type="text" placeholder="Seu nome"><input class="inp" id="r-email" type="email" placeholder="seu@email.com"><input class="inp" id="r-pass" type="password" placeholder="Senha"><div class="slabel">Gêneros favoritos (escolha ao menos 1)</div><div class="ggrid" id="gsel"><div class="gpill" data-g="Rock" onclick="toggleG(this)">🎸 Rock</div><div class="gpill" data-g="Pop" onclick="toggleG(this)">🎵 Pop</div><div class="gpill" data-g="MPB" onclick="toggleG(this)">🇧🇷 MPB</div><div class="gpill" data-g="Sertanejo" onclick="toggleG(this)">🤠 Sertanejo</div><div class="gpill" data-g="Hip-Hop" onclick="toggleG(this)">🎤 Hip-Hop</div><div class="gpill" data-g="Eletrônica" onclick="toggleG(this)">🎧 Eletrônica</div><div class="gpill" data-g="Jazz" onclick="toggleG(this)">🎷 Jazz</div><div class="gpill" data-g="Clássico" onclick="toggleG(this)">🎻 Clássico</div><div class="gpill" data-g="R&amp;B" onclick="toggleG(this)">🎹 R&amp;B</div></div><button class="btn" onclick="doRegister()">Criar conta →</button></div></div></div>
 
-<div id="app"><div class="topbar"><div class="tlogo">A<em style="color:var(--pink);font-style:italic">I</em>R</div><div class="tbadge live"><div class="ldot"></div>AO VIVO</div><div class="tbadge" id="loc-badge">📍 —</div><div class="tbadge" id="time-badge">🕐 —</div><div class="spacer"></div><div class="tav" id="tav">?</div><span class="tname" id="tname"></span><button class="sbtn" onclick="logout()">Sair</button></div>
-<div class="body"><div class="side"><div class="ssec"><div class="stitle">🌤 Clima & Local</div><div class="wcard"><div class="wtemp" id="wtemp">—°</div><div class="wcity" id="wcity">Detectando...</div><div class="wdesc" id="wdesc"></div><div class="wgrid"><div class="witem"><div class="wlbl">Umidade</div><div class="wval" id="whum">—</div></div><div class="witem"><div class="wlbl">Vento</div><div class="wval" id="wwind">—</div></div><div class="witem"><div class="wlbl">Sensação</div><div class="wval" id="wfeel">—</div></div><div class="witem"><div class="wlbl">UV</div><div class="wval" id="wuv">—</div></div></div></div><div class="tcard"><div class="trow"><div class="tdot" id="tdot" style="background:#2dd4bf"></div><div class="tlbl" id="tlbl">Verificando...</div></div><div class="tdesc" id="tdesc">Obtendo condições de tráfego...</div></div></div><div class="ssec"><div class="stitle">🤖 Preferências IA</div><div id="pbars"></div></div><div class="ssec"><div class="stitle">🎛 Modo de Rádio</div><div class="mgrid"><div class="mpill on" id="m-fav" onclick="setMode('fav',this)">❤️ Favoritos</div><div class="mpill" id="m-disco" onclick="setMode('disco',this)">🔭 Descoberta</div><div class="mpill" id="m-mood" onclick="setMode('mood',this)">🌙 Por Humor</div><div class="mpill" id="m-local" onclick="setMode('local',this)">📍 Sons do Brasil</div></div></div><div class="ssec"><div class="stitle">📺 Vídeo YouTube</div><button class="sbtn" style="width:100%;padding:9px;text-align:center;font-size:12px" onclick="toggleYTPanel()">Mostrar / Ocultar vídeo</button><div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--fm);line-height:1.5">O vídeo aparece na aba Fila ao tocar uma música</div></div></div>
-<div class="main"><div class="np"><div class="np-hdr"><div class="ldot"></div>tocando agora</div><div class="np-row"><div class="np-thumb" id="np-thumb"><div class="np-ico">🎵</div></div><div class="np-inf"><div class="np-title" id="np-title">Selecione uma música</div><div class="np-artist" id="np-artist">—</div><div class="np-tag" id="np-tag">—</div></div><div class="np-acts"><button class="abtn" id="lbtn" onclick="toggleLike()">🤍 Curtir</button><button class="abtn" onclick="aiAbout()">🎙️ DJ falar</button><button class="abtn yt-btn" id="ytopen" onclick="openYT()">▶ YouTube</button></div></div></div>
-<div class="ctrl"><div id="visualizer"></div><div class="progbar" id="prog" onclick="seekClick(event)"><div class="progfill" id="prog-fill" style="width:0%"></div></div><div class="ptimes"><span id="tcur">0:00</span><span id="ttot">0:00</span></div><div class="crow"><button class="cbtn" id="cbsh" onclick="togShuffle()" title="Aleatório">🔀</button><button class="cbtn" onclick="prev()" title="Anterior">⏮</button><button class="cplay" id="cplay" onclick="togPlay()">▶</button><button class="cbtn" onclick="next()" title="Próxima">⏭</button><button class="cbtn" id="cbrp" onclick="togRepeat()" title="Repetir">🔁</button><div class="volw">🔊<input type="range" min="0" max="100" value="80" id="vol" oninput="setVol(this.value)" style="width:68px"></div></div></div>
-<div class="feed"><div class="ftabs"><button class="ftab on" onclick="switchFeed('queue',this)">📋 Fila</button><button class="ftab" onclick="switchFeed('ai',this)">🎙️ DJ & Chat</button><button class="ftab" onclick="switchFeed('prefs',this)">⚙️ Preferências</button></div>
-<div id="f-queue"><div class="sbar info" id="sbar">Faça login e clique ▶ para começar</div><div class="yt-wrap" id="yt-wrap"><iframe id="yt-iframe" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-autoplay"></iframe></div><div class="qlist" id="qlist"></div></div>
-<div id="f-ai" style="display:none"><div id="aimsgs"></div><div class="chatwrap"><input class="chatinp" id="chat-inp" placeholder="Pergunte ao DJ... ex: Curiosidades sobre essa banda?" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"><button class="chatsend" id="chat-send" onclick="sendChat()">Enviar</button></div></div>
-<div id="f-prefs" style="display:none"><div class="psec"><div class="ptitle">📊 Gêneros mais ouvidos</div><div id="full-pbars"></div></div><div class="psec"><div class="ptitle">❤️ Músicas curtidas</div><div class="qlist" id="liked-list"></div></div><div class="psec"><div class="ptitle">🎛 Ajustar gêneros favoritos</div><div class="ggrid" id="pgsel"></div><button class="btn" style="margin-top:11px;border-radius:12px;padding:12px" onclick="savePref()">Salvar e atualizar fila</button></div>
-<div class="psec api-config"><div class="ptitle">🔑 Chaves de API para IAs (opcional)</div><div class="slabel">Selecionar provedor</div><select id="ai-provider"><option value="auto">🤖 Combinar todas (Multi‑IA)</option><option value="anthropic">🎙️ Claude (Anthropic)</option><option value="google">🌐 Gemini (Google)</option><option value="openai">💬 ChatGPT (OpenAI)</option><option value="deepseek">🧠 DeepSeek</option></select><input class="inp" id="key-anthropic" type="password" placeholder="Chave Anthropic (sk-ant-...)"><input class="inp" id="key-google" type="password" placeholder="Chave Google AI Studio (AIza...)"><input class="inp" id="key-openai" type="password" placeholder="Chave OpenAI (sk-...)"><input class="inp" id="key-deepseek" type="password" placeholder="Chave DeepSeek"><button class="sbtn" style="width:100%;padding:8px" onclick="saveApiKeys()">💾 Salvar chaves</button><div style="font-size:10px;color:var(--text3);margin-top:6px">As chaves ficam salvas no seu navegador. Modo "Combinar todas" usa todas as IAs configuradas.</div></div></div></div></div></div></div>
+<div id="toast"></div>
+
+<div id="auth">
+  <div class="abox">
+    <div class="alogo">A<em>I</em>R</div>
+    <div class="atag">Rádio inteligente · DJ powered by IA</div>
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab('login',this)">Entrar</button>
+      <button class="tab"    onclick="switchTab('reg',this)">Cadastrar</button>
+    </div>
+    <div id="frm-login">
+      <input class="inp" id="l-email" type="email"    placeholder="seu@email.com" value="demo@air.fm">
+      <input class="inp" id="l-pass"  type="password" placeholder="Senha"         value="123456">
+      <button class="btn" onclick="doLogin()">Sintonizar →</button>
+    </div>
+    <div id="frm-reg" style="display:none">
+      <input class="inp" id="r-name"  type="text"     placeholder="Seu nome">
+      <input class="inp" id="r-email" type="email"    placeholder="seu@email.com">
+      <input class="inp" id="r-pass"  type="password" placeholder="Senha">
+      <div class="slabel">Gêneros favoritos (escolha ao menos 1)</div>
+      <div class="ggrid" id="gsel">
+        <div class="gpill" data-g="Rock"       onclick="toggleG(this)">🎸 Rock</div>
+        <div class="gpill" data-g="Pop"        onclick="toggleG(this)">🎵 Pop</div>
+        <div class="gpill" data-g="MPB"        onclick="toggleG(this)">🇧🇷 MPB</div>
+        <div class="gpill" data-g="Sertanejo"  onclick="toggleG(this)">🤠 Sertanejo</div>
+        <div class="gpill" data-g="Hip-Hop"    onclick="toggleG(this)">🎤 Hip-Hop</div>
+        <div class="gpill" data-g="Eletrônica" onclick="toggleG(this)">🎧 Eletrônica</div>
+        <div class="gpill" data-g="Jazz"       onclick="toggleG(this)">🎷 Jazz</div>
+        <div class="gpill" data-g="Clássico"   onclick="toggleG(this)">🎻 Clássico</div>
+        <div class="gpill" data-g="R&amp;B"    onclick="toggleG(this)">🎹 R&amp;B</div>
+      </div>
+      <button class="btn" onclick="doRegister()">Criar conta →</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="tlogo">A<em style="color:var(--pink);font-style:italic">I</em>R</div>
+    <div class="tbadge live"><div class="ldot"></div>AO VIVO</div>
+    <div class="tbadge" id="loc-badge">📍 —</div>
+    <div class="tbadge" id="time-badge">🕐 —</div>
+    <div class="spacer"></div>
+    <div class="tav" id="tav">?</div>
+    <span class="tname" id="tname"></span>
+    <button class="sbtn" onclick="logout()">Sair</button>
+  </div>
+
+  <div class="body">
+    <div class="side">
+      <div class="ssec">
+        <div class="stitle">🌤 Clima &amp; Local</div>
+        <div class="wcard">
+          <div class="wtemp" id="wtemp">—°</div>
+          <div class="wcity" id="wcity">Detectando...</div>
+          <div class="wdesc"  id="wdesc"></div>
+          <div class="wgrid">
+            <div class="witem"><div class="wlbl">Umidade</div><div class="wval" id="whum">—</div></div>
+            <div class="witem"><div class="wlbl">Vento</div><div class="wval"   id="wwind">—</div></div>
+            <div class="witem"><div class="wlbl">Sensação</div><div class="wval" id="wfeel">—</div></div>
+            <div class="witem"><div class="wlbl">UV</div><div class="wval"      id="wuv">—</div></div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="trow"><div class="tdot" id="tdot" style="background:#2dd4bf"></div><div class="tlbl" id="tlbl">Verificando...</div></div>
+          <div class="tdesc" id="tdesc">Obtendo condições de tráfego...</div>
+        </div>
+      </div>
+      <div class="ssec">
+        <div class="stitle">🤖 Preferências IA</div>
+        <div id="pbars"></div>
+      </div>
+      <div class="ssec">
+        <div class="stitle">🎛 Modo de Rádio</div>
+        <div class="mgrid">
+          <div class="mpill on" id="m-fav"   onclick="setMode('fav',this)">❤️ Favoritos</div>
+          <div class="mpill"    id="m-disco" onclick="setMode('disco',this)">🔭 Descoberta</div>
+          <div class="mpill"    id="m-mood"  onclick="setMode('mood',this)">🌙 Por Humor</div>
+          <div class="mpill"    id="m-local" onclick="setMode('local',this)">📍 Sons do Brasil</div>
+        </div>
+      </div>
+      <div class="ssec">
+        <div class="stitle">📺 Vídeo YouTube</div>
+        <button class="sbtn" style="width:100%;padding:9px;text-align:center;font-size:12px" onclick="toggleYTPanel()">
+          Mostrar / Ocultar vídeo
+        </button>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--fm);line-height:1.5">
+          O vídeo aparece na aba Fila ao tocar uma música
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="np">
+        <div class="np-hdr"><div class="ldot"></div>tocando agora</div>
+        <div class="np-row">
+          <div class="np-thumb" id="np-thumb">
+            <div class="np-ico">🎵</div>
+          </div>
+          <div class="np-inf">
+            <div class="np-title"  id="np-title">Selecione uma música</div>
+            <div class="np-artist" id="np-artist">—</div>
+            <div class="np-tag"    id="np-tag">—</div>
+          </div>
+          <div class="np-acts">
+            <button class="abtn"     id="lbtn"   onclick="toggleLike()">🤍 Curtir</button>
+            <button class="abtn"               onclick="aiAbout()">🎙️ DJ falar</button>
+            <button class="abtn yt-btn" id="ytopen" onclick="openYT()">▶ YouTube</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div id="visualizer"></div>
+        <div class="progbar" id="prog" onclick="seekClick(event)">
+          <div class="progfill" id="prog-fill" style="width:0%"></div>
+        </div>
+        <div class="ptimes"><span id="tcur">0:00</span><span id="ttot">0:00</span></div>
+        <div class="crow">
+          <button class="cbtn" id="cbsh" onclick="togShuffle()" title="Aleatório">🔀</button>
+          <button class="cbtn" onclick="prev()" title="Anterior">⏮</button>
+          <button class="cplay" id="cplay" onclick="togPlay()">▶</button>
+          <button class="cbtn" onclick="next()" title="Próxima">⏭</button>
+          <button class="cbtn" id="cbrp" onclick="togRepeat()" title="Repetir">🔁</button>
+          <div class="volw">🔊<input type="range" min="0" max="100" value="80" id="vol" oninput="setVol(this.value)" style="width:68px"></div>
+        </div>
+      </div>
+
+      <div class="feed">
+        <div class="ftabs">
+          <button class="ftab on" onclick="switchFeed('queue',this)">📋 Fila</button>
+          <button class="ftab"    onclick="switchFeed('ai',this)">🎙️ DJ &amp; Chat</button>
+          <button class="ftab"    onclick="switchFeed('prefs',this)">⚙️ Preferências</button>
+        </div>
+
+        <div id="f-queue">
+          <div class="sbar info" id="sbar">Faça login e clique ▶ para começar</div>
+          <div class="yt-wrap" id="yt-wrap">
+            <iframe id="yt-iframe" allowfullscreen
+              allow="autoplay; encrypted-media; picture-in-picture"
+              sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-autoplay">
+            </iframe>
+          </div>
+          <div class="qlist" id="qlist"></div>
+        </div>
+
+        <div id="f-ai" style="display:none">
+          <div id="aimsgs"></div>
+          <div class="chatwrap">
+            <input class="chatinp" id="chat-inp"
+              placeholder="Pergunte ao DJ... ex: Curiosidades sobre essa banda?"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}">
+            <button class="chatsend" id="chat-send" onclick="sendChat()">Enviar</button>
+          </div>
+        </div>
+
+        <div id="f-prefs" style="display:none">
+          <div class="psec">
+            <div class="ptitle">📊 Gêneros mais ouvidos</div>
+            <div id="full-pbars"></div>
+          </div>
+          <div class="psec">
+            <div class="ptitle">❤️ Músicas curtidas</div>
+            <div class="qlist" id="liked-list"></div>
+          </div>
+          <div class="psec">
+            <div class="ptitle">🎛 Ajustar gêneros favoritos</div>
+            <div class="ggrid" id="pgsel"></div>
+            <button class="btn" style="margin-top:11px;border-radius:12px;padding:12px" onclick="savePref()">
+              Salvar e atualizar fila
+            </button>
+          </div>
+          <div class="psec api-config">
+            <div class="ptitle">🔑 Chaves de API para IAs (opcional)</div>
+            <div class="slabel">Selecionar provedor</div>
+            <select id="ai-provider">
+              <option value="auto">🤖 Combinar todas (Multi‑IA)</option>
+              <option value="anthropic">🎙️ Claude (Anthropic)</option>
+              <option value="google">🌐 Gemini (Google)</option>
+              <option value="openai">💬 ChatGPT (OpenAI)</option>
+              <option value="deepseek">🧠 DeepSeek</option>
+            </select>
+            <input class="inp" id="key-anthropic" type="password" placeholder="Chave Anthropic (sk-ant-...)">
+            <input class="inp" id="key-google" type="password" placeholder="Chave Google AI Studio (AIza...)" >
+            <input class="inp" id="key-openai" type="password" placeholder="Chave OpenAI (sk-...)">
+            <input class="inp" id="key-deepseek" type="password" placeholder="Chave DeepSeek">
+            <button class="sbtn" style="width:100%;padding:8px" onclick="saveApiKeys()">💾 Salvar chaves</button>
+            <div style="font-size:10px;color:var(--text3);margin-top:6px">As chaves ficam salvas no seu navegador. Modo "Combinar todas" usa todas as IAs configuradas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ════════════════════════════════════════════
@@ -216,6 +433,7 @@ const CATALOG = [
   {id:'bkIqBQBnSO4', title:'Aquarela do Brasil',       artist:'Gal Costa',             genre:'MPB',       year:1975, dur:248},
   {id:'450p7goxZqg', title:'Wrecking Ball',            artist:'Miley Cyrus',           genre:'Pop',       year:2013, dur:222},
 ];
+
 const ALL_GENRES = ['Rock','Pop','MPB','Sertanejo','Hip-Hop','Eletrônica','Jazz','Clássico','R&B'];
 const TRAFFIC_DATA = [
   {c:'#2dd4bf', l:'Trânsito Livre',    d:'Vias desobstruídas. Boa viagem! 🚗'},
@@ -232,7 +450,8 @@ const S = {
   mode:'fav', weather:null, traffic:null,
   chatHistory:[], prefs:{}, ytPanelOpen:false,
   simPos:0, simDur:240, simTimer:null, simStart:0, simOffset:0,
-  vizTimer:null, apiKeys:{}, aiProvider:'auto'
+  vizTimer:null, apiKeys:{}, aiProvider:'auto',
+  transitionInProgress:false,
 };
 
 // ════════════════════════════════════════════
@@ -242,6 +461,453 @@ function toast(msg){
   const el=document.getElementById('toast');
   el.textContent=msg;el.classList.add('show');
   clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3300);
+}
+
+// ════════════════════════════════════════════
+// WAVEFORM VISUALIZER
+// ════════════════════════════════════════════
+function buildViz(){
+  const el=document.getElementById('visualizer');
+  el.innerHTML='';
+  for(let i=0;i<32;i++){
+    const b=document.createElement('div');
+    b.className='vbar';b.style.height='3px';el.appendChild(b);
+  }
+}
+function animViz(on){
+  clearInterval(S.vizTimer);
+  const bars=document.querySelectorAll('.vbar');
+  if(!on){bars.forEach(b=>b.style.height='3px');return;}
+  S.vizTimer=setInterval(()=>{
+    bars.forEach(b=>{
+      const h=3+Math.random()*34;
+      b.style.height=h+'px';
+    });
+  },120);
+}
+
+// ════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════
+let selG=[];
+function switchTab(t,el){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  document.getElementById('frm-login').style.display=t==='login'?'block':'none';
+  document.getElementById('frm-reg').style.display=t==='reg'?'block':'none';
+}
+function toggleG(el){
+  const g=el.dataset.g;
+  if(selG.includes(g)){selG=selG.filter(x=>x!==g);el.classList.remove('on');}
+  else{selG.push(g);el.classList.add('on');}
+}
+function getUsers(){return JSON.parse(localStorage.getItem('air5_users')||'{}');}
+function saveUsers(u){localStorage.setItem('air5_users',JSON.stringify(u));}
+
+function doLogin(){
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  if(!email||!pass){toast('⚠️ Preencha todos os campos');return;}
+  let u=getUsers();
+  if(!u[email]){
+    u[email]={name:'Demo',pass:'123456',genres:['Rock','Pop','MPB'],
+      prefs:{Rock:72,Pop:65,MPB:48,Sertanejo:22},liked:[],history:[]};
+    saveUsers(u);
+  }
+  S.user={email,...u[email]};
+  S.liked=[...(u[email].liked||[])];
+  S.prefs={...(u[email].prefs||{})};
+  enterApp();
+}
+function doRegister(){
+  const name=document.getElementById('r-name').value.trim();
+  const email=document.getElementById('r-email').value.trim();
+  const pass=document.getElementById('r-pass').value;
+  if(!name||!email||!pass){toast('⚠️ Preencha tudo');return;}
+  if(selG.length<1){toast('⚠️ Escolha ao menos 1 gênero');return;}
+  const prefs={};selG.forEach(g=>{prefs[g]=40+Math.floor(Math.random()*30);});
+  const u=getUsers();
+  u[email]={name,pass,genres:selG,prefs,liked:[],history:[]};
+  saveUsers(u);
+  S.user={email,name,genres:selG,prefs,liked:[],history:[]};
+  S.liked=[];S.prefs={...prefs};
+  enterApp();
+}
+function logout(){
+  persistUser();
+  stopSim();animViz(false);
+  S.user=null;S.playing=false;S.chatHistory=[];S.cur=null;
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('auth').classList.remove('gone');
+  document.getElementById('yt-iframe').src='';
+  toast('👋 Até logo!');
+}
+function persistUser(){
+  if(!S.user)return;
+  const u=getUsers();
+  if(u[S.user.email]){u[S.user.email].liked=S.liked;u[S.user.email].prefs=S.prefs;saveUsers(u);}
+}
+function enterApp(){
+  document.getElementById('auth').classList.add('gone');
+  document.getElementById('app').classList.add('on');
+  const n=S.user.name||S.user.email.split('@')[0];
+  document.getElementById('tav').textContent=n[0].toUpperCase();
+  document.getElementById('tname').textContent=n;
+  buildViz();
+  buildQueue();renderQueue();renderPrefs();
+  initLocation();startClock();scheduleAnnounce();startMotivationScheduler();
+  setStatus(`Olá, ${n}! Clique ▶ em qualquer música para começar.`,'info');
+  updateNP(S.queue[0]);
+  toast(`🎵 Bem-vindo(a), ${n}!`);
+}
+
+// ════════════════════════════════════════════
+// STATUS BAR
+// ════════════════════════════════════════════
+function setStatus(msg,type='info'){
+  const b=document.getElementById('sbar');
+  b.textContent=msg;
+  b.className='sbar '+type;
+}
+
+// ════════════════════════════════════════════
+// QUEUE
+// ════════════════════════════════════════════
+function buildQueue(){
+  let tracks=[...CATALOG];
+  if(S.mode==='fav'){
+    tracks.sort((a,b)=>{
+      const pa=(S.prefs[a.genre]||0)+(S.liked.includes(a.id)?25:0);
+      const pb=(S.prefs[b.genre]||0)+(S.liked.includes(b.id)?25:0);
+      return pb-pa;
+    });
+  } else if(S.mode==='disco'){
+    tracks=tracks.filter(t=>!S.liked.includes(t.id)).sort(()=>Math.random()-.5);
+  } else if(S.mode==='mood'){
+    tracks.sort(()=>Math.random()-.5);
+  } else if(S.mode==='local'){
+    const loc=tracks.filter(t=>['MPB','Sertanejo'].includes(t.genre));
+    tracks=loc.length>=3?loc:tracks;
+  }
+  if(S.shuffle)tracks.sort(()=>Math.random()-.5);
+  S.queue=tracks;
+}
+function renderQueue(){
+  document.getElementById('qlist').innerHTML=S.queue.map((t,i)=>`
+    <div class="qitem ${i===S.idx?'cur':''}" onclick="playIdx(${i})">
+      <div class="qnum">${i===S.idx?'▶':i+1}</div>
+      <div class="qth"><img src="https://img.youtube.com/vi/${t.id}/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="qinf">
+        <div class="qtitle">${t.title}</div>
+        <div class="qart">${t.artist} · ${t.genre} · ${t.year}</div>
+      </div>
+      <button class="qlike ${S.liked.includes(t.id)?'on':''}" onclick="event.stopPropagation();likeTrack('${t.id}')">
+        ${S.liked.includes(t.id)?'❤️':'🤍'}
+      </button>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════
+// PLAYER
+// ════════════════════════════════════════════
+function playIdx(i){S.idx=i;loadTrack(true);}
+function loadTrack(auto=false){
+  const t=S.queue[S.idx];
+  if(!t)return;
+  S.cur=t;
+  updateNP(t);
+  renderQueue();
+  bumpPref(t.genre);
+  const ap=auto?1:0;
+  const iframe=document.getElementById('yt-iframe');
+  iframe.src=`https://www.youtube.com/embed/${t.id}?autoplay=${ap}&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
+  if(auto){
+    document.getElementById('yt-wrap').classList.add('on');
+    S.ytPanelOpen=true;
+    S.playing=true;
+    updPlayBtn();
+    setEQ(true);
+    animViz(true);
+    startSim(t.dur||240);
+    setStatus(`▶ ${t.title} — ${t.artist} · Vídeo carregando abaixo`,'ok');
+    announceTrack(t);
+  } else {
+    S.playing=false;updPlayBtn();setEQ(false);animViz(false);
+  }
+}
+function togglePlay(){  // mantido para compatibilidade com onclick do original
+  if(!S.cur){loadTrack(true);return;}
+  if(S.playing){
+    pauseIframe();pauseSim();
+    S.playing=false;updPlayBtn();setEQ(false);animViz(false);
+    setStatus(`⏸ Pausado: ${S.cur.title}`,'info');
+  }else{
+    const pos=Math.floor(S.simPos);
+    document.getElementById('yt-iframe').src=`https://www.youtube.com/embed/${S.cur.id}?autoplay=1&start=${pos}&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
+    document.getElementById('yt-wrap').classList.add('on');
+    resumeSim();S.playing=true;updPlayBtn();setEQ(true);animViz(true);
+    setStatus(`▶ ${S.cur.title} — ${S.cur.artist}`,'ok');
+  }
+}
+// alias para manter o onclick original
+window.togPlay = togglePlay;
+
+function pauseIframe(){
+  document.getElementById('yt-iframe').src='about:blank';
+}
+function next(){
+  if(S.transitionInProgress) return;
+  if(S.repeat&&S.cur){loadTrack(true);return;}
+  const prevTrack=S.cur;
+  const newIdx=S.shuffle?Math.floor(Math.random()*S.queue.length):(S.idx+1)%S.queue.length;
+  const nextTrack=S.queue[newIdx];
+  if(prevTrack && nextTrack && S.user){
+    S.transitionInProgress=true;
+    showTyping();
+    generateTransitionComment(prevTrack, nextTrack).then(comment=>{
+      hideTyping();
+      if(comment) addBubble(comment, null, false, '🎙️ DJ (Transição)');
+      S.transitionInProgress=false;
+      S.idx=newIdx;
+      loadTrack(true);
+    }).catch(err=>{
+      console.warn(err);
+      hideTyping();
+      addBubble(`🎶 Próxima: ${nextTrack.title}! 🎶`,null,false,'📻 Rádio');
+      S.transitionInProgress=false;
+      S.idx=newIdx;
+      loadTrack(true);
+    });
+  } else {
+    S.idx=newIdx;
+    loadTrack(true);
+  }
+}
+function prev(){
+  if(S.transitionInProgress) return;
+  const newIdx=(S.idx-1+S.queue.length)%S.queue.length;
+  const prevTrack=S.cur;
+  const nextTrack=S.queue[newIdx];
+  if(prevTrack && nextTrack && S.user){
+    S.transitionInProgress=true;
+    showTyping();
+    generateTransitionComment(prevTrack, nextTrack).then(comment=>{
+      hideTyping();
+      if(comment) addBubble(comment, null, false, '🎙️ DJ (Volta)');
+      S.transitionInProgress=false;
+      S.idx=newIdx;
+      loadTrack(true);
+    }).catch(err=>{
+      console.warn(err);
+      hideTyping();
+      addBubble(`🎶 Voltando para ${nextTrack.title}! 🎶`,null,false,'📻 Rádio');
+      S.transitionInProgress=false;
+      S.idx=newIdx;
+      loadTrack(true);
+    });
+  } else {
+    S.idx=newIdx;
+    loadTrack(true);
+  }
+}
+function seekClick(e){
+  const r=e.currentTarget.getBoundingClientRect();
+  const p=(e.clientX-r.left)/r.width;
+  const pos=Math.floor(p*S.simDur);
+  S.simPos=pos;
+  document.getElementById('prog-fill').style.width=(p*100)+'%';
+  document.getElementById('tcur').textContent=fmtT(pos);
+  if(S.playing&&S.cur){
+    document.getElementById('yt-iframe').src=
+      `https://www.youtube.com/embed/${S.cur.id}?autoplay=1&start=${pos}&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
+    S.simStart=Date.now();
+    S.simOffset=pos;
+  }
+}
+function togShuffle(){S.shuffle=!S.shuffle;document.getElementById('cbsh').classList.toggle('on',S.shuffle);buildQueue();renderQueue();}
+function togRepeat(){S.repeat=!S.repeat;document.getElementById('cbrp').classList.toggle('on',S.repeat);}
+function setVol(v){
+  S.vol=parseInt(v);
+  try{
+    const iframe=document.getElementById('yt-iframe');
+    if(iframe.contentWindow)
+      iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[S.vol]}),'*');
+  }catch(e){}
+}
+function openYT(){
+  if(S.cur)window.open(`https://www.youtube.com/watch?v=${S.cur.id}`,'_blank');
+}
+function toggleYTPanel(){
+  const w=document.getElementById('yt-wrap');
+  S.ytPanelOpen=!S.ytPanelOpen;
+  w.classList.toggle('on',S.ytPanelOpen);
+}
+function fmtT(s){const m=Math.floor(s/60),sc=Math.floor(s%60);return `${m}:${sc<10?'0':''}${sc}`;}
+function updPlayBtn(){document.getElementById('cplay').textContent=S.playing?'⏸':'▶';}
+function setEQ(on){document.querySelectorAll('.eqb').forEach(b=>b.classList.toggle('play',on));}
+
+// Simulated progress
+function startSim(dur){
+  stopSim();
+  S.simDur=dur;S.simPos=0;S.simStart=Date.now();S.simOffset=0;
+  document.getElementById('ttot').textContent=fmtT(dur);
+  _runSim();
+}
+function _runSim(){
+  S.simTimer=setInterval(()=>{
+    S.simPos=S.simOffset+(Date.now()-S.simStart)/1000;
+    if(S.simPos>=S.simDur){stopSim();next();return;}
+    document.getElementById('prog-fill').style.width=(S.simPos/S.simDur*100)+'%';
+    document.getElementById('tcur').textContent=fmtT(S.simPos);
+  },500);
+}
+function pauseSim(){clearInterval(S.simTimer);S.simTimer=null;}
+function resumeSim(){
+  S.simOffset=S.simPos;S.simStart=Date.now();
+  _runSim();
+}
+function stopSim(){
+  clearInterval(S.simTimer);S.simTimer=null;
+  S.simPos=0;
+  document.getElementById('prog-fill').style.width='0%';
+  document.getElementById('tcur').textContent='0:00';
+}
+
+// ════════════════════════════════════════════
+// NOW PLAYING UI
+// ════════════════════════════════════════════
+function updateNP(t){
+  if(!t)return;
+  document.getElementById('np-title').textContent=t.title;
+  document.getElementById('np-artist').textContent=`${t.artist} · ${t.year}`;
+  document.getElementById('np-tag').textContent=t.genre;
+  document.getElementById('np-thumb').innerHTML=`
+    <img src="https://img.youtube.com/vi/${t.id}/mqdefault.jpg"
+      style="width:100%;height:100%;object-fit:cover"
+      onerror="this.parentNode.innerHTML='<div class=np-ico>🎵</div>'">
+    <div class="eq">
+      <div class="eqb"></div><div class="eqb"></div>
+      <div class="eqb"></div><div class="eqb"></div>
+    </div>`;
+  const lb=document.getElementById('lbtn');
+  lb.textContent=S.liked.includes(t.id)?'❤️ Curtida':'🤍 Curtir';
+  lb.className='abtn'+(S.liked.includes(t.id)?' liked':'');
+}
+function toggleLike(){if(!S.cur)return;likeTrack(S.cur.id);updateNP(S.cur);}
+function likeTrack(id){
+  if(S.liked.includes(id)){S.liked=S.liked.filter(x=>x!==id);}
+  else{
+    S.liked.push(id);
+    const t=S.queue.find(x=>x.id===id);
+    if(t)S.prefs[t.genre]=Math.min(100,(S.prefs[t.genre]||30)+10);
+  }
+  persistUser();renderQueue();renderPrefs();
+}
+
+// ════════════════════════════════════════════
+// PREFERENCES / MODE
+// ════════════════════════════════════════════
+function bumpPref(g){S.prefs[g]=Math.min(100,(S.prefs[g]||30)+1.5);renderPrefs();persistUser();}
+function renderPrefs(){
+  const s=Object.entries(S.prefs).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  const html=s.map(([g,v])=>`<div class="prow">
+    <div class="plbl">${g}</div>
+    <div class="ptrack"><div class="pfill" style="width:${Math.round(v)}%"></div></div>
+    <div class="ppct">${Math.round(v)}%</div></div>`).join('');
+  document.getElementById('pbars').innerHTML=html;
+  document.getElementById('full-pbars').innerHTML=html;
+  const liked=S.queue.filter(t=>S.liked.includes(t.id));
+  document.getElementById('liked-list').innerHTML=liked.length
+    ?liked.map(t=>`<div class="qitem" onclick="playIdx(${S.queue.indexOf(t)})">
+      <div class="qth"><img src="https://img.youtube.com/vi/${t.id}/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="qinf"><div class="qtitle">${t.title}</div><div class="qart">${t.artist}</div></div>
+      <span style="font-size:16px">❤️</span></div>`).join('')
+    :'<div class="empty">Nenhuma música curtida ainda</div>';
+  const ug=S.user?.genres||[];
+  document.getElementById('pgsel').innerHTML=ALL_GENRES.map(g=>`
+    <div class="gpill ${ug.includes(g)?'on':''}" data-g="${g}" onclick="this.classList.toggle('on')">${g}</div>`).join('');
+}
+function savePref(){
+  const sel=[...document.querySelectorAll('#pgsel .gpill.on')].map(e=>e.dataset.g);
+  S.user.genres=sel;
+  const u=getUsers();if(u[S.user.email]){u[S.user.email].genres=sel;saveUsers(u);}
+  buildQueue();renderQueue();toast('✅ Preferências salvas! Fila atualizada.');
+}
+function setMode(m,el){
+  S.mode=m;document.querySelectorAll('.mpill').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  buildQueue();renderQueue();
+  toast({fav:'❤️ Modo Favoritos',disco:'🔭 Modo Descoberta',mood:'🌙 Modo Humor',local:'📍 Sons do Brasil'}[m]);
+}
+
+// ════════════════════════════════════════════
+// WEATHER & LOCATION
+// ════════════════════════════════════════════
+function initLocation(){
+  if(!navigator.geolocation){fakeWeather();return;}
+  navigator.geolocation.getCurrentPosition(
+    pos=>{ fetchWeather(pos.coords.latitude,pos.coords.longitude); reverseGeo(pos.coords.latitude,pos.coords.longitude); },
+    ()=>fakeWeather()
+  );
+}
+function fetchWeather(lat,lon){
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,uv_index,weather_code&timezone=auto`)
+    .then(r=>r.json()).then(d=>{
+      const c=d.current,desc=wcode(c.weather_code||0);
+      document.getElementById('wtemp').textContent=Math.round(c.temperature_2m)+'°';
+      document.getElementById('wdesc').textContent=desc;
+      document.getElementById('whum').textContent=c.relative_humidity_2m+'%';
+      document.getElementById('wwind').textContent=Math.round(c.wind_speed_10m)+' km/h';
+      document.getElementById('wfeel').textContent=Math.round(c.apparent_temperature)+'°';
+      document.getElementById('wuv').textContent=Math.round(c.uv_index||0);
+      S.weather={temp:Math.round(c.temperature_2m),desc,hum:c.relative_humidity_2m,wind:Math.round(c.wind_speed_10m)};
+      setTraffic();
+    }).catch(()=>fakeWeather());
+}
+function reverseGeo(lat,lon){
+  fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+    .then(r=>r.json()).then(d=>{
+      const city=d.address?.city||d.address?.town||d.address?.village||'Sua cidade';
+      const st=d.address?.state||'';
+      document.getElementById('wcity').textContent=city;
+      document.getElementById('loc-badge').textContent=`📍 ${city}${st?', '+st.slice(0,2):''}`;
+    }).catch(()=>{});
+}
+function wcode(c){
+  if(c===0)return '☀️ Céu limpo';if(c<=3)return '⛅ Nublado';if(c<=48)return '🌫 Névoa';
+  if(c<=67)return '🌧 Chuva';if(c<=77)return '❄️ Neve';if(c<=82)return '🌦 Pancadas';return '⛈ Tempestade';
+}
+function fakeWeather(){
+  const t=18+Math.floor(Math.random()*14);
+  const ds=['☀️ Ensolarado','⛅ Parcialmente nublado','🌧 Chuva leve','🌦 Garoa','☁️ Nublado'];
+  const desc=ds[Math.floor(Math.random()*ds.length)];
+  document.getElementById('wtemp').textContent=t+'°';
+  document.getElementById('wcity').textContent='Jaraguá do Sul';
+  document.getElementById('wdesc').textContent=desc;
+  document.getElementById('whum').textContent=(50+Math.floor(Math.random()*40))+'%';
+  document.getElementById('wwind').textContent=(5+Math.floor(Math.random()*20))+' km/h';
+  document.getElementById('wfeel').textContent=(t-2)+'°';
+  document.getElementById('wuv').textContent=Math.floor(Math.random()*9);
+  document.getElementById('loc-badge').textContent='📍 Jaraguá do Sul, SC';
+  S.weather={temp:t,desc,hum:65,wind:12};
+  setTraffic();
+}
+function setTraffic(){
+  const tr=TRAFFIC_DATA[Math.floor(Math.random()*TRAFFIC_DATA.length)];
+  document.getElementById('tdot').style.background=tr.c;
+  document.getElementById('tlbl').textContent=tr.l;
+  document.getElementById('tdesc').textContent=tr.d;
+  S.traffic=tr;
+  setTimeout(setTraffic,8*60*1000);
+}
+
+// ════════════════════════════════════════════
+// CLOCK
+// ════════════════════════════════════════════
+function startClock(){
+  const tick=()=>{
+    const n=new Date();
+    document.getElementById('time-badge').textContent=
+      `🕐 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+  };tick();setInterval(tick,30000);
 }
 
 // ════════════════════════════════════════════
@@ -268,17 +934,17 @@ function saveApiKeys(){
   S.aiProvider=document.getElementById('ai-provider').value;
   localStorage.setItem('air_api_keys',JSON.stringify(S.apiKeys));
   localStorage.setItem('air_ai_provider',S.aiProvider);
-  toast('Chaves salvas! IAs prontas para comentários.');
+  toast('Chaves salvas! IAs prontas.');
 }
 
 // ════════════════════════════════════════════
-// CHAMADAS PARA AS APIs (REAIS)
+// CHAMADAS DE IA (Claude, Gemini, ChatGPT, DeepSeek)
 // ════════════════════════════════════════════
 async function callClaude(prompt){
   if(!S.apiKeys.anthropic) throw new Error('Chave Anthropic não configurada');
   const res=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST', headers:{'Content-Type':'application/json','x-api-key':S.apiKeys.anthropic,'anthropic-version':'2023-06-01'},
-    body:JSON.stringify({model:'claude-3-haiku-20240307',max_tokens:300,system:"Você é um DJ de rádio brasileiro, descontraído, curto, máximo 3 frases.",messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-3-haiku-20240307',max_tokens:300,system:"Você é DJ de rádio brasileiro, descontraído, máximo 3 frases.",messages:[{role:'user',content:prompt}]})
   });
   const data=await res.json();
   if(data.error) throw new Error(data.error.message);
@@ -296,7 +962,7 @@ async function callChatGPT(prompt){
   if(!S.apiKeys.openai) throw new Error('Chave OpenAI não configurada');
   const res=await fetch('https://api.openai.com/v1/chat/completions',{
     method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${S.apiKeys.openai}`},
-    body:JSON.stringify({model:'gpt-3.5-turbo',messages:[{role:'system',content:'Você é um DJ de rádio brasileiro, alegre e direto, máximo 40 palavras.'},{role:'user',content:prompt}],max_tokens:150})
+    body:JSON.stringify({model:'gpt-3.5-turbo',messages:[{role:'system',content:'Você é DJ brasileiro, alegre, máximo 40 palavras.'},{role:'user',content:prompt}],max_tokens:150})
   });
   const data=await res.json();
   if(data.error) throw new Error(data.error.message);
@@ -306,15 +972,14 @@ async function callDeepSeek(prompt){
   if(!S.apiKeys.deepseek) throw new Error('Chave DeepSeek não configurada');
   const res=await fetch('https://api.deepseek.com/v1/chat/completions',{
     method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${S.apiKeys.deepseek}`},
-    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:'Você é um DJ brasileiro animado, máximo 3 frases.'},{role:'user',content:prompt}],max_tokens:150})
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:'Você é DJ brasileiro animado, máximo 3 frases.'},{role:'user',content:prompt}],max_tokens:150})
   });
   const data=await res.json();
   if(data.error) throw new Error(data.error.message);
   return data.choices[0].message.content;
 }
 async function getMultiAIComment(prompt){
-  const prov=S.aiProvider;
-  const keys=S.apiKeys;
+  const prov=S.aiProvider, keys=S.apiKeys;
   if(prov==='anthropic' && keys.anthropic) return await callClaude(prompt);
   if(prov==='google' && keys.google) return await callGemini(prompt);
   if(prov==='openai' && keys.openai) return await callChatGPT(prompt);
@@ -335,283 +1000,13 @@ async function getMultiAIComment(prompt){
 }
 
 // ════════════════════════════════════════════
-// WAVEFORM VISUALIZER
-// ════════════════════════════════════════════
-function buildViz(){
-  const el=document.getElementById('visualizer');
-  el.innerHTML='';
-  for(let i=0;i<32;i++){const b=document.createElement('div');b.className='vbar';b.style.height='3px';el.appendChild(b);}
-}
-function animViz(on){
-  clearInterval(S.vizTimer);
-  const bars=document.querySelectorAll('.vbar');
-  if(!on){bars.forEach(b=>b.style.height='3px');return;}
-  S.vizTimer=setInterval(()=>{bars.forEach(b=>{const h=3+Math.random()*34;b.style.height=h+'px';});},120);
-}
-
-// ════════════════════════════════════════════
-// AUTH
-// ════════════════════════════════════════════
-let selG=[];
-function switchTab(t,el){
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');
-  document.getElementById('frm-login').style.display=t==='login'?'block':'none';
-  document.getElementById('frm-reg').style.display=t==='reg'?'block':'none';
-}
-function toggleG(el){
-  const g=el.dataset.g;
-  if(selG.includes(g)){selG=selG.filter(x=>x!==g);el.classList.remove('on');}
-  else{selG.push(g);el.classList.add('on');}
-}
-function getUsers(){return JSON.parse(localStorage.getItem('air5_users')||'{}');}
-function saveUsers(u){localStorage.setItem('air5_users',JSON.stringify(u));}
-function doLogin(){
-  const email=document.getElementById('l-email').value.trim();
-  const pass=document.getElementById('l-pass').value;
-  if(!email||!pass){toast('⚠️ Preencha os campos');return;}
-  let u=getUsers();
-  if(!u[email]){
-    u[email]={name:'Demo',pass:'123456',genres:['Rock','Pop','MPB'], prefs:{Rock:72,Pop:65,MPB:48,Sertanejo:22}, liked:[], history:[]};
-    saveUsers(u);
-  }
-  S.user={email,...u[email]};
-  S.liked=[...(u[email].liked||[])];
-  S.prefs={...(u[email].prefs||{})};
-  enterApp();
-}
-function doRegister(){
-  const name=document.getElementById('r-name').value.trim();
-  const email=document.getElementById('r-email').value.trim();
-  const pass=document.getElementById('r-pass').value;
-  if(!name||!email||!pass){toast('⚠️ Preencha tudo');return;}
-  if(selG.length<1){toast('⚠️ Escolha ao menos 1 gênero');return;}
-  const prefs={};selG.forEach(g=>{prefs[g]=40+Math.floor(Math.random()*30);});
-  const u=getUsers();
-  u[email]={name,pass,genres:selG,prefs,liked:[],history:[]};
-  saveUsers(u);
-  S.user={email,name,genres:selG,prefs,liked:[],history:[]};
-  S.liked=[];S.prefs={...prefs};
-  enterApp();
-}
-function persistUser(){if(!S.user)return;const u=getUsers();if(u[S.user.email]){u[S.user.email].liked=S.liked;u[S.user.email].prefs=S.prefs;saveUsers(u);}}
-function logout(){
-  persistUser();stopSim();animViz(false);
-  S.user=null;S.playing=false;S.chatHistory=[];S.cur=null;
-  document.getElementById('app').classList.remove('on');
-  document.getElementById('auth').classList.remove('gone');
-  document.getElementById('yt-iframe').src='';
-  toast('👋 Até logo!');
-}
-function enterApp(){
-  document.getElementById('auth').classList.add('gone');
-  document.getElementById('app').classList.add('on');
-  const n=S.user.name||S.user.email.split('@')[0];
-  document.getElementById('tav').textContent=n[0].toUpperCase();
-  document.getElementById('tname').textContent=n;
-  buildViz();
-  buildQueue();renderQueue();renderPrefs();
-  initLocation();startClock();scheduleAnnounce();
-  setStatus(`Olá, ${n}! Clique ▶ em qualquer música para começar.`,'info');
-  updateNP(S.queue[0]);
-  toast(`🎵 Bem-vindo(a), ${n}!`);
-}
-
-// ════════════════════════════════════════════
-// STATUS BAR
-// ════════════════════════════════════════════
-function setStatus(msg,type='info'){
-  const b=document.getElementById('sbar');
-  b.textContent=msg;
-  b.className='sbar '+type;
-}
-
-// ════════════════════════════════════════════
-// QUEUE
-// ════════════════════════════════════════════
-function buildQueue(){
-  let tracks=[...CATALOG];
-  if(S.mode==='fav'){
-    tracks.sort((a,b)=>((S.prefs[b.genre]||0)+(S.liked.includes(b.id)?25:0))-((S.prefs[a.genre]||0)+(S.liked.includes(a.id)?25:0)));
-  }else if(S.mode==='disco'){
-    tracks=tracks.filter(t=>!S.liked.includes(t.id)).sort(()=>Math.random()-.5);
-  }else if(S.mode==='mood'){
-    tracks.sort(()=>Math.random()-.5);
-  }else if(S.mode==='local'){
-    const loc=tracks.filter(t=>['MPB','Sertanejo'].includes(t.genre));
-    tracks=loc.length>=3?loc:tracks;
-  }
-  if(S.shuffle)tracks.sort(()=>Math.random()-.5);
-  S.queue=tracks;
-}
-function renderQueue(){
-  document.getElementById('qlist').innerHTML=S.queue.map((t,i)=>`
-    <div class="qitem ${i===S.idx?'cur':''}" onclick="playIdx(${i})">
-      <div class="qnum">${i===S.idx?'▶':i+1}</div>
-      <div class="qth"><img src="https://img.youtube.com/vi/${t.id}/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'"></div>
-      <div class="qinf"><div class="qtitle">${t.title}</div><div class="qart">${t.artist} · ${t.genre} · ${t.year}</div></div>
-      <button class="qlike ${S.liked.includes(t.id)?'on':''}" onclick="event.stopPropagation();likeTrack('${t.id}')">${S.liked.includes(t.id)?'❤️':'🤍'}</button>
-    </div>`).join('');
-}
-function playIdx(i){S.idx=i;loadTrack(true);}
-
-// ════════════════════════════════════════════
-// PLAYER
-// ════════════════════════════════════════════
-function loadTrack(auto=false){
-  const t=S.queue[S.idx];
-  if(!t)return;
-  S.cur=t;
-  updateNP(t);
-  renderQueue();
-  bumpPref(t.genre);
-  const ap=auto?1:0;
-  const iframe=document.getElementById('yt-iframe');
-  iframe.src=`https://www.youtube.com/embed/${t.id}?autoplay=${ap}&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
-  if(auto){
-    document.getElementById('yt-wrap').classList.add('on');
-    S.ytPanelOpen=true;
-    S.playing=true;
-    updPlayBtn();
-    setEQ(true);
-    animViz(true);
-    startSim(t.dur||240);
-    setStatus(`▶ ${t.title} — ${t.artist} · Vídeo carregando`,'ok');
-    announceTrack(t);
-  }else{
-    S.playing=false;updPlayBtn();setEQ(false);animViz(false);
-  }
-}
-function togPlay(){
-  if(!S.cur){loadTrack(true);return;}
-  if(S.playing){
-    pauseIframe();pauseSim();
-    S.playing=false;updPlayBtn();setEQ(false);animViz(false);
-    setStatus(`⏸ Pausado: ${S.cur.title}`,'info');
-  }else{
-    const pos=Math.floor(S.simPos);
-    document.getElementById('yt-iframe').src=`https://www.youtube.com/embed/${S.cur.id}?autoplay=1&start=${pos}&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
-    document.getElementById('yt-wrap').classList.add('on');
-    resumeSim();S.playing=true;updPlayBtn();setEQ(true);animViz(true);
-    setStatus(`▶ ${S.cur.title} — ${S.cur.artist}`,'ok');
-  }
-}
-function pauseIframe(){document.getElementById('yt-iframe').src='about:blank';}
-function next(){
-  if(S.repeat&&S.cur){loadTrack(true);return;}
-  const prevTrack=S.cur;
-  const newIdx=S.shuffle?Math.floor(Math.random()*S.queue.length):(S.idx+1)%S.queue.length;
-  const nextTrack=S.queue[newIdx];
-  // Comentário de transição via IA (não bloqueia)
-  if(prevTrack && nextTrack && S.user){
-    generateTransitionComment(prevTrack, nextTrack).then(txt=>{
-      if(txt) addBubble(txt, null, false, '🎙️ DJ (Transição)');
-    }).catch(()=>addBubble(`🎶 Próxima: ${nextTrack.title}! 🎶`,null,false,'📻 Rádio'));
-  }
-  S.idx=newIdx;
-  loadTrack(true);
-}
-function prev(){
-  if(S.simPos>4){loadTrack(true);return;}
-  const newIdx=(S.idx-1+S.queue.length)%S.queue.length;
-  const prevTrack=S.cur;
-  const nextTrack=S.queue[newIdx];
-  if(prevTrack && nextTrack && S.user){
-    generateTransitionComment(prevTrack, nextTrack).then(txt=>{
-      if(txt) addBubble(txt, null, false, '🎙️ DJ (Transição)');
-    }).catch(()=>{});
-  }
-  S.idx=newIdx;
-  loadTrack(true);
-}
-function seekClick(e){
-  const r=e.currentTarget.getBoundingClientRect();
-  const p=(e.clientX-r.left)/r.width;
-  const pos=Math.floor(p*S.simDur);
-  S.simPos=pos;
-  document.getElementById('prog-fill').style.width=(p*100)+'%';
-  document.getElementById('tcur').textContent=fmtT(pos);
-  if(S.playing&&S.cur){
-    document.getElementById('yt-iframe').src=`https://www.youtube.com/embed/${S.cur.id}?autoplay=1&start=${pos}&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`;
-    S.simStart=Date.now();S.simOffset=pos;
-  }
-}
-function togShuffle(){S.shuffle=!S.shuffle;document.getElementById('cbsh').classList.toggle('on',S.shuffle);buildQueue();renderQueue();}
-function togRepeat(){S.repeat=!S.repeat;document.getElementById('cbrp').classList.toggle('on',S.repeat);}
-function setVol(v){S.vol=parseInt(v);try{const iframe=document.getElementById('yt-iframe');if(iframe.contentWindow)iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[S.vol]}),'*');}catch(e){}}
-function openYT(){if(S.cur)window.open(`https://www.youtube.com/watch?v=${S.cur.id}`,'_blank');}
-function toggleYTPanel(){const w=document.getElementById('yt-wrap');S.ytPanelOpen=!S.ytPanelOpen;w.classList.toggle('on',S.ytPanelOpen);}
-function fmtT(s){const m=Math.floor(s/60),sc=Math.floor(s%60);return `${m}:${sc<10?'0':''}${sc}`;}
-function updPlayBtn(){document.getElementById('cplay').textContent=S.playing?'⏸':'▶';}
-function setEQ(on){document.querySelectorAll('.eqb').forEach(b=>b.classList.toggle('play',on));}
-function startSim(dur){stopSim();S.simDur=dur;S.simPos=0;S.simStart=Date.now();S.simOffset=0;document.getElementById('ttot').textContent=fmtT(dur);_runSim();}
-function _runSim(){S.simTimer=setInterval(()=>{S.simPos=S.simOffset+(Date.now()-S.simStart)/1000;if(S.simPos>=S.simDur){stopSim();next();return;}document.getElementById('prog-fill').style.width=(S.simPos/S.simDur*100)+'%';document.getElementById('tcur').textContent=fmtT(S.simPos);},500);}
-function pauseSim(){clearInterval(S.simTimer);S.simTimer=null;}
-function resumeSim(){S.simOffset=S.simPos;S.simStart=Date.now();_runSim();}
-function stopSim(){clearInterval(S.simTimer);S.simTimer=null;S.simPos=0;document.getElementById('prog-fill').style.width='0%';document.getElementById('tcur').textContent='0:00';}
-
-// ════════════════════════════════════════════
-// NOW PLAYING UI
-// ════════════════════════════════════════════
-function updateNP(t){
-  if(!t)return;
-  document.getElementById('np-title').textContent=t.title;
-  document.getElementById('np-artist').textContent=`${t.artist} · ${t.year}`;
-  document.getElementById('np-tag').textContent=t.genre;
-  document.getElementById('np-thumb').innerHTML=`
-    <img src="https://img.youtube.com/vi/${t.id}/mqdefault.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.parentNode.innerHTML='<div class=np-ico>🎵</div>'">
-    <div class="eq"><div class="eqb"></div><div class="eqb"></div><div class="eqb"></div><div class="eqb"></div></div>`;
-  const lb=document.getElementById('lbtn');
-  lb.textContent=S.liked.includes(t.id)?'❤️ Curtida':'🤍 Curtir';
-  lb.className='abtn'+(S.liked.includes(t.id)?' liked':'');
-}
-function toggleLike(){if(!S.cur)return;likeTrack(S.cur.id);updateNP(S.cur);}
-function likeTrack(id){
-  if(S.liked.includes(id)){S.liked=S.liked.filter(x=>x!==id);}
-  else{S.liked.push(id);const t=S.queue.find(x=>x.id===id);if(t)S.prefs[t.genre]=Math.min(100,(S.prefs[t.genre]||30)+10);}
-  persistUser();renderQueue();renderPrefs();
-}
-
-// ════════════════════════════════════════════
-// PREFERENCES / MODE
-// ════════════════════════════════════════════
-function bumpPref(g){S.prefs[g]=Math.min(100,(S.prefs[g]||30)+1.5);renderPrefs();persistUser();}
-function renderPrefs(){
-  const s=Object.entries(S.prefs).sort((a,b)=>b[1]-a[1]).slice(0,7);
-  const html=s.map(([g,v])=>`<div class="prow"><div class="plbl">${g}</div><div class="ptrack"><div class="pfill" style="width:${Math.round(v)}%"></div></div><div class="ppct">${Math.round(v)}%</div></div>`).join('');
-  document.getElementById('pbars').innerHTML=html;
-  document.getElementById('full-pbars').innerHTML=html;
-  const liked=S.queue.filter(t=>S.liked.includes(t.id));
-  document.getElementById('liked-list').innerHTML=liked.length?liked.map(t=>`<div class="qitem" onclick="playIdx(${S.queue.indexOf(t)})"><div class="qth"><img src="https://img.youtube.com/vi/${t.id}/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'"></div><div class="qinf"><div class="qtitle">${t.title}</div><div class="qart">${t.artist}</div></div><span style="font-size:16px">❤️</span></div>`).join(''):'<div class="empty">Nenhuma música curtida ainda</div>';
-  const ug=S.user?.genres||[];
-  document.getElementById('pgsel').innerHTML=ALL_GENRES.map(g=>`<div class="gpill ${ug.includes(g)?'on':''}" data-g="${g}" onclick="this.classList.toggle('on')">${g}</div>`).join('');
-}
-function savePref(){
-  const sel=[...document.querySelectorAll('#pgsel .gpill.on')].map(e=>e.dataset.g);
-  S.user.genres=sel;
-  const u=getUsers();if(u[S.user.email]){u[S.user.email].genres=sel;saveUsers(u);}
-  buildQueue();renderQueue();toast('✅ Preferências salvas! Fila atualizada.');
-}
-function setMode(m,el){S.mode=m;document.querySelectorAll('.mpill').forEach(x=>x.classList.remove('on'));el.classList.add('on');buildQueue();renderQueue();toast({fav:'❤️ Modo Favoritos',disco:'🔭 Modo Descoberta',mood:'🌙 Modo Humor',local:'📍 Sons do Brasil'}[m]);}
-
-// ════════════════════════════════════════════
-// WEATHER & LOCATION
-// ════════════════════════════════════════════
-function initLocation(){if(!navigator.geolocation){fakeWeather();return;}navigator.geolocation.getCurrentPosition(pos=>{fetchWeather(pos.coords.latitude,pos.coords.longitude);reverseGeo(pos.coords.latitude,pos.coords.longitude);},()=>fakeWeather());}
-function fetchWeather(lat,lon){fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,apparent_temperature,uv_index,weather_code&timezone=auto`).then(r=>r.json()).then(d=>{const c=d.current,desc=wcode(c.weather_code||0);document.getElementById('wtemp').textContent=Math.round(c.temperature_2m)+'°';document.getElementById('wdesc').textContent=desc;document.getElementById('whum').textContent=c.relative_humidity_2m+'%';document.getElementById('wwind').textContent=Math.round(c.wind_speed_10m)+' km/h';document.getElementById('wfeel').textContent=Math.round(c.apparent_temperature)+'°';document.getElementById('wuv').textContent=Math.round(c.uv_index||0);S.weather={temp:Math.round(c.temperature_2m),desc,hum:c.relative_humidity_2m,wind:Math.round(c.wind_speed_10m)};setTraffic();}).catch(()=>fakeWeather());}
-function reverseGeo(lat,lon){fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`).then(r=>r.json()).then(d=>{const city=d.address?.city||d.address?.town||d.address?.village||'Sua cidade';const st=d.address?.state||'';document.getElementById('wcity').textContent=city;document.getElementById('loc-badge').textContent=`📍 ${city}${st?', '+st.slice(0,2):''}`;}).catch(()=>{});}
-function wcode(c){if(c===0)return'☀️ Céu limpo';if(c<=3)return'⛅ Nublado';if(c<=48)return'🌫 Névoa';if(c<=67)return'🌧 Chuva';if(c<=77)return'❄️ Neve';if(c<=82)return'🌦 Pancadas';return'⛈ Tempestade';}
-function fakeWeather(){const t=18+Math.floor(Math.random()*14);const ds=['☀️ Ensolarado','⛅ Parcialmente nublado','🌧 Chuva leve','🌦 Garoa','☁️ Nublado'];const desc=ds[Math.floor(Math.random()*ds.length)];document.getElementById('wtemp').textContent=t+'°';document.getElementById('wcity').textContent='Jaraguá do Sul';document.getElementById('wdesc').textContent=desc;document.getElementById('whum').textContent=(50+Math.floor(Math.random()*40))+'%';document.getElementById('wwind').textContent=(5+Math.floor(Math.random()*20))+' km/h';document.getElementById('wfeel').textContent=(t-2)+'°';document.getElementById('wuv').textContent=Math.floor(Math.random()*9);document.getElementById('loc-badge').textContent='📍 Jaraguá do Sul, SC';S.weather={temp:t,desc,hum:65,wind:12};setTraffic();}
-function setTraffic(){const tr=TRAFFIC_DATA[Math.floor(Math.random()*TRAFFIC_DATA.length)];document.getElementById('tdot').style.background=tr.c;document.getElementById('tlbl').textContent=tr.l;document.getElementById('tdesc').textContent=tr.d;S.traffic=tr;setTimeout(setTraffic,8*60*1000);}
-function startClock(){const tick=()=>{const n=new Date();document.getElementById('time-badge').textContent=`🕐 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;};tick();setInterval(tick,30000);}
-
-// ════════════════════════════════════════════
-// IA: ANÚNCIOS, TRANSIÇÕES E MOTIVAÇÃO
+// ANÚNCIOS E TRANSIÇÕES COM IA
 // ════════════════════════════════════════════
 async function generateTransitionComment(prevTrack, nextTrack){
   const userName=S.user?.name?.split(' ')[0]||'ouvinte';
   const clima=S.weather?`${S.weather.temp}°C, ${S.weather.desc}`:'clima agradável';
   const trafego=S.traffic?.l||'trânsito normal';
-  const prompt=`Comente como DJ animado de rádio brasileira (AIR). A música "${prevTrack.title}" de ${prevTrack.artist} acabou. Agora vamos tocar "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Inclua: uma curiosidade rápida sobre ${nextTrack.artist}, o clima agora (${clima}), o trânsito (${trafego}) e uma saudação personalizada para o ouvinte ${userName}. Seja positivo, máximo 4 frases.`;
+  const prompt=`Comente como DJ animado de rádio brasileira (AIR). A música "${prevTrack.title}" de ${prevTrack.artist} acabou. Agora vamos tocar "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Inclua: uma curiosidade rápida sobre ${nextTrack.artist}, o clima agora (${clima}), o trânsito (${trafego}) e uma saudação personalizada para o ouvinte ${userName}. Seja positivo, máximo 3 frases.`;
   return await getMultiAIComment(prompt);
 }
 async function announceTrack(track){
@@ -623,7 +1018,7 @@ async function announceTrack(track){
   try{
     const text=await getMultiAIComment(prompt);
     if(text) addBubble(text, track, false);
-  }catch(e){addBubble(`🎤 Tocando ${track.title} de ${track.artist}. Curtiu? Dá like! ❤️`,track,false);}
+  }catch(e){ addBubble(`🎤 Tocando ${track.title} de ${track.artist}. Curtiu? Dá like! ❤️`, track, false); }
 }
 async function aiAbout(){
   if(!S.cur){toast('Nenhuma música tocando');return;}
@@ -634,9 +1029,8 @@ async function aiAbout(){
     hideTyping();addBubble(text,S.cur);
   }catch(e){hideTyping();addBubble('📡 IA indisponível no momento. Verifique conexão.',S.cur);}
 }
-// Mensagem motivacional direcionada ao usuário (será chamada a cada ~2 minutos)
 async function sendMotivationalMessage(){
-  if(!S.user) return;
+  if(!S.user || !S.playing) return;
   const userName=S.user.name?.split(' ')[0]||'amigo';
   const hoje=new Date().toLocaleDateString('pt-BR',{weekday:'long'});
   const prompt=`Fale uma mensagem motivacional curta (2 frases) e alegre para o ouvinte chamado ${userName}. Mencione o dia da semana (${hoje}), o clima (${S.weather?.desc||'agradável'}) e diga algo sobre aproveitar a música. Tom positivo.`;
@@ -645,13 +1039,9 @@ async function sendMotivationalMessage(){
     if(text) addBubble(text, null, false, '💪 Motivação');
   }catch(e){}
 }
-// Agendamento: a cada 2 minutos, se estiver tocando, envia uma motivação
-let motivTimer=null;
 function startMotivationScheduler(){
-  if(motivTimer) clearInterval(motivTimer);
-  motivTimer=setInterval(()=>{
-    if(S.playing && S.user) sendMotivationalMessage();
-  },120000); // a cada 2 minutos
+  if(S.motivTimer) clearInterval(S.motivTimer);
+  S.motivTimer=setInterval(()=>{ if(S.playing && S.user) sendMotivationalMessage(); }, 120000);
 }
 function scheduleAnnounce(){
   setTimeout(async()=>{
@@ -663,6 +1053,15 @@ function scheduleAnnounce(){
 // ════════════════════════════════════════════
 // BUBBLES E CHAT
 // ════════════════════════════════════════════
+let typEl=null;
+function showTyping(pre=true){
+  hideTyping();
+  typEl=document.createElement('div');typEl.className='aibub';typEl.id='typ-el';
+  typEl.innerHTML=`<div class="ai-hdr"><div class="ai-ico">🎙️</div><span class="ai-badge">DJ AIR</span></div><div class="typing"><div class="tyd"></div><div class="tyd"></div><div class="tyd"></div></div>`;
+  const m=document.getElementById('aimsgs');
+  pre?m.insertBefore(typEl,m.firstChild):m.appendChild(typEl);
+}
+function hideTyping(){const e=document.getElementById('typ-el');if(e)e.remove();typEl=null;}
 function addBubble(text, track, prepend=false, customTitle=null){
   const aimsg=document.getElementById('aimsgs');
   if(!aimsg) return;
@@ -673,30 +1072,27 @@ function addBubble(text, track, prepend=false, customTitle=null){
   prepend?aimsg.insertBefore(el,aimsg.firstChild):aimsg.appendChild(el);
   aimsg.scrollTop=aimsg.scrollHeight;
 }
-let typEl=null;
-function showTyping(pre=true){
-  hideTyping();
-  typEl=document.createElement('div');typEl.className='aibub';typEl.id='typ-el';
-  typEl.innerHTML=`<div class="ai-hdr"><div class="ai-ico">🎙️</div><span class="ai-badge">DJ AIR</span></div><div class="typing"><div class="tyd"></div><div class="tyd"></div><div class="tyd"></div></div>`;
-  const m=document.getElementById('aimsgs');
-  pre?m.insertBefore(typEl,m.firstChild):m.appendChild(typEl);
-}
-function hideTyping(){const e=document.getElementById('typ-el');if(e)e.remove();typEl=null;}
 async function sendChat(){
   const inp=document.getElementById('chat-inp');
   const msg=inp.value.trim();if(!msg)return;
   inp.value='';
   const btn=document.getElementById('chat-send');btn.disabled=true;
-  const ub=document.createElement('div');ub.className='ubub';ub.innerHTML=`<strong>Você:</strong> ${msg}`;
+  const ub=document.createElement('div');ub.className='ubub';
+  ub.innerHTML=`<strong>Você:</strong> ${msg}`;
   document.getElementById('aimsgs').appendChild(ub);
   S.chatHistory.push({role:'user',content:msg});
+  if(S.chatHistory.length>24)S.chatHistory=S.chatHistory.slice(-24);
   showTyping(false);
   try{
-    const system=`Você é o DJ da rádio AIR. Responda como um amigo animado, em português brasileiro, máximo 3 frases. Clima: ${S.weather?.desc||'desconhecido'}. Música atual: ${S.cur?.title||'nenhuma'}.`;
+    const system=`Você é o DJ da rádio AIR. Responda como amigo animado, em português brasileiro, máximo 3 frases. Clima: ${S.weather?.desc||'desconhecido'}. Música atual: ${S.cur?.title||'nenhuma'}.`;
     const text=await getMultiAIComment(system+'\n\nUsuário: '+msg);
+    S.chatHistory.push({role:'assistant',content:text});
     hideTyping();addBubble(text,null,false);
-  }catch(e){hideTyping();addBubble(`📡 Erro na IA: ${e.message}. Use chaves válidas.`,null,false);}
+  }catch(e){
+    hideTyping();addBubble('📡 IA indisponível. Tente novamente.',null,false);
+  }
   btn.disabled=false;
+  document.getElementById('aimsgs').scrollTop=999999;
 }
 function switchFeed(t,el){
   ['queue','ai','prefs'].forEach(x=>document.getElementById('f-'+x).style.display=x===t?'block':'none');
@@ -706,11 +1102,10 @@ function switchFeed(t,el){
 }
 
 // ════════════════════════════════════════════
-// INICIALIZAÇÃO
+// AUTO-SAVE & INIT
 // ════════════════════════════════════════════
-loadApiKeys();
 setInterval(persistUser,60000);
-startMotivationScheduler();
+loadApiKeys();
 </script>
 </body>
 </html>
