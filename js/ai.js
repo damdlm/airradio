@@ -55,9 +55,11 @@ async function callClaude(prompt) {
 
 async function callGemini(prompt) {
   if (!S.apiKeys.google) throw new Error('Chave Google não configurada');
-  const res = await fetch(`${PROXY_BASE}/proxy/google?model=gemini-1.5-flash`, {
+  // Gemini permite chamada direta do browser (sem proxy/CORS)
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${S.apiKeys.google}`;
+  const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-google-key': S.apiKeys.google },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
   });
   const data = await res.json();
