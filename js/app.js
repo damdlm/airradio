@@ -83,6 +83,7 @@ function enterApp() {
 
   setStatus(`Olá, ${n}! Clique ▶ em qualquer música para começar.`, 'info');
   updateNP(S.queue[0]);
+  setInterval(persistUser, 60000);
   toast(`🎵 Bem-vindo(a), ${n}!`);
 }
 
