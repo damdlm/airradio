@@ -43,7 +43,7 @@ async function callClaude(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': S.apiKeys.anthropic },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5', max_tokens: 300,
+      model: 'claude-haiku-4-5-20251001', max_tokens: 300,
       system: 'Você é DJ de rádio brasileiro, descontraído, máximo 3 frases.',
       messages: [{ role: 'user', content: prompt }],
     }),
