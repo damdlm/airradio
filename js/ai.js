@@ -276,5 +276,5 @@ function switchFeed(t, el) {
   });
   document.querySelectorAll('.ftab').forEach(x => x.classList.remove('on'));
   if (el) el.classList.add('on');
-  if (t === 'prefs') renderPrefs();
+  if (t === 'prefs') { renderPrefs(); fillApiFields(); }
 }
