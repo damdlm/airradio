@@ -1,37 +1,31 @@
 // ════════════════════════════════════════════
 // AIR — Rádio Inteligente
-// ai.js — Chamadas de IA via proxy local (sem CORS)
+// ai.js — Chamadas de IA com rate limiting
 // ════════════════════════════════════════════
 
-const PROXY_BASE = '';
-// ── Fila de requisições (evita 429) ──────────
+// ── Rate limiting: 1 chamada por vez, 5s de intervalo ──
+let _aiLocked = false;
 const _aiQueue = [];
-let _aiRunning = false;
 
-async function queueAI(fn) {
+function queueAI(fn) {
   return new Promise((resolve, reject) => {
     _aiQueue.push({ fn, resolve, reject });
-    _processQueue();
+    _drainQueue();
   });
 }
 
-async function _processQueue() {
-  if (_aiRunning || _aiQueue.length === 0) return;
-  _aiRunning = true;
+async function _drainQueue() {
+  if (_aiLocked || _aiQueue.length === 0) return;
+  _aiLocked = true;
   const { fn, resolve, reject } = _aiQueue.shift();
-  try {
-    const result = await fn();
-    resolve(result);
-  } catch (e) {
-    reject(e);
-  } finally {
-    await new Promise(r => setTimeout(r, 4000));
-    _aiRunning = false;
-    _processQueue();
+  try { resolve(await fn()); }
+  catch (e) { reject(e); }
+  finally {
+    await new Promise(r => setTimeout(r, 5000));
+    _aiLocked = false;
+    _drainQueue();
   }
 }
-
-
 
 // ── Chaves de API ─────────────────────────────
 
@@ -42,12 +36,20 @@ function loadApiKeys() {
     const prov = localStorage.getItem('air_ai_provider');
     if (prov) S.aiProvider = prov;
   } catch { }
+  fillApiFields();
+}
 
-  document.getElementById('key-anthropic').value = S.apiKeys.anthropic || '';
-  document.getElementById('key-google').value    = S.apiKeys.google    || '';
-  document.getElementById('key-openai').value    = S.apiKeys.openai    || '';
-  document.getElementById('key-deepseek').value  = S.apiKeys.deepseek  || '';
-  document.getElementById('ai-provider').value   = S.aiProvider;
+function fillApiFields() {
+  const fa = document.getElementById('key-anthropic');
+  const fg = document.getElementById('key-google');
+  const fo = document.getElementById('key-openai');
+  const fd = document.getElementById('key-deepseek');
+  const fp = document.getElementById('ai-provider');
+  if (fa) fa.value = S.apiKeys.anthropic || '';
+  if (fg) fg.value = S.apiKeys.google    || '';
+  if (fo) fo.value = S.apiKeys.openai    || '';
+  if (fd) fd.value = S.apiKeys.deepseek  || '';
+  if (fp) fp.value = S.aiProvider;
 }
 
 function saveApiKeys() {
@@ -63,11 +65,11 @@ function saveApiKeys() {
   toast('💾 Chaves salvas! IAs prontas.');
 }
 
-// ── Chamadas via proxy ────────────────────────
+// ── Chamadas de API ───────────────────────────
 
 async function callClaude(prompt) {
   if (!S.apiKeys.anthropic) throw new Error('Chave Anthropic não configurada');
-  const res = await fetch(`${PROXY_BASE}/proxy/anthropic`, {
+  const res = await fetch('/proxy/anthropic', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': S.apiKeys.anthropic },
     body: JSON.stringify({
@@ -83,7 +85,6 @@ async function callClaude(prompt) {
 
 async function callGemini(prompt) {
   if (!S.apiKeys.google) throw new Error('Chave Google não configurada');
-  // Gemini permite chamada direta do browser (sem proxy/CORS)
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${S.apiKeys.google}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -97,7 +98,7 @@ async function callGemini(prompt) {
 
 async function callChatGPT(prompt) {
   if (!S.apiKeys.openai) throw new Error('Chave OpenAI não configurada');
-  const res = await fetch(`${PROXY_BASE}/proxy/openai`, {
+  const res = await fetch('/proxy/openai', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.openai}` },
     body: JSON.stringify({
@@ -115,7 +116,7 @@ async function callChatGPT(prompt) {
 
 async function callDeepSeek(prompt) {
   if (!S.apiKeys.deepseek) throw new Error('Chave DeepSeek não configurada');
-  const res = await fetch(`${PROXY_BASE}/proxy/deepseek`, {
+  const res = await fetch('/proxy/deepseek', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.deepseek}` },
     body: JSON.stringify({
@@ -131,36 +132,35 @@ async function callDeepSeek(prompt) {
   return data.choices[0].message.content;
 }
 
+// Tenta cada IA em sequência (não em paralelo) para evitar 429
 async function getMultiAIComment(prompt) {
-  return queueAI(async () => { // rate limit queue
-  const _result = await _getMultiAICommentInner(prompt);
-  return _result;
+  return queueAI(async () => {
+    const prov = S.aiProvider;
+    const keys = S.apiKeys;
+
+    // Provedor específico selecionado
+    if (prov === 'anthropic' && keys.anthropic) return await callClaude(prompt);
+    if (prov === 'google'    && keys.google)    return await callGemini(prompt);
+    if (prov === 'openai'    && keys.openai)    return await callChatGPT(prompt);
+    if (prov === 'deepseek'  && keys.deepseek)  return await callDeepSeek(prompt);
+
+    // Modo auto: tenta cada uma EM SEQUÊNCIA (não paralelo) até uma funcionar
+    if (prov === 'auto') {
+      const providers = [];
+      if (keys.google)    providers.push(() => callGemini(prompt));
+      if (keys.anthropic) providers.push(() => callClaude(prompt));
+      if (keys.openai)    providers.push(() => callChatGPT(prompt));
+      if (keys.deepseek)  providers.push(() => callDeepSeek(prompt));
+      if (providers.length === 0) throw new Error('Nenhuma chave de IA configurada');
+
+      for (const fn of providers) {
+        try { return await fn(); } catch (e) { console.warn('IA falhou, tentando próxima:', e.message); }
+      }
+      throw new Error('Todas as IAs falharam');
+    }
+
+    throw new Error('Nenhuma IA selecionada ou chave configurada');
   });
-}
-
-async function _getMultiAICommentInner(prompt) {
-  const prov = S.aiProvider;
-  const keys = S.apiKeys;
-
-  if (prov === 'anthropic' && keys.anthropic) return await callClaude(prompt);
-  if (prov === 'google'    && keys.google)    return await callGemini(prompt);
-  if (prov === 'openai'    && keys.openai)    return await callChatGPT(prompt);
-  if (prov === 'deepseek'  && keys.deepseek)  return await callDeepSeek(prompt);
-
-  if (prov === 'auto') {
-    const tasks = [];
-    if (keys.anthropic) tasks.push(callClaude(prompt).catch(() => null));
-    if (keys.google)    tasks.push(callGemini(prompt).catch(() => null));
-    if (keys.openai)    tasks.push(callChatGPT(prompt).catch(() => null));
-    if (keys.deepseek)  tasks.push(callDeepSeek(prompt).catch(() => null));
-    if (tasks.length === 0) throw new Error('Nenhuma chave de IA configurada');
-    const results = await Promise.all(tasks);
-    const valid   = results.filter(r => r !== null);
-    if (valid.length === 0) throw new Error('Todas as IAs falharam');
-    return valid.slice(0, 2).join(' 🤝 ');
-  }
-
-  throw new Error('Nenhuma IA selecionada ou chave configurada');
 }
 
 // ── Comentários do DJ ─────────────────────────
@@ -169,21 +169,22 @@ async function generateTransitionComment(prevTrack, nextTrack) {
   const userName = S.user?.name?.split(' ')[0] || 'ouvinte';
   const clima    = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : 'clima agradável';
   const trafego  = S.traffic?.l || 'trânsito normal';
-  const prompt   = `Comente como DJ animado de rádio brasileira (AIR). A música "${prevTrack.title}" de ${prevTrack.artist} acabou. Agora vamos tocar "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Inclua: uma curiosidade rápida sobre ${nextTrack.artist}, o clima agora (${clima}), o trânsito (${trafego}) e uma saudação personalizada para ${userName}. Seja positivo, máximo 3 frases.`;
-  return await getMultiAIComment(prompt);
+  return await getMultiAIComment(
+    `Comente como DJ animado de rádio brasileira (AIR). Tocou "${prevTrack.title}" de ${prevTrack.artist}. Agora: "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Clima: ${clima}. Trânsito: ${trafego}. Saudação para ${userName}. Máximo 3 frases.`
+  );
 }
 
 async function announceTrack(track) {
   if (!track) return;
   const userName = S.user?.name?.split(' ')[0] || 'ouvinte';
   const clima    = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : 'clima agradável';
-  const trafego  = S.traffic?.l || 'trânsito normal';
-  const prompt   = `Você é DJ da rádio AIR. Está tocando "${track.title}" de ${track.artist} (${track.genre}, ${track.year}). Comente com entusiasmo: curiosidade sobre a música/artista, relacione com o clima (${clima}) e trânsito (${trafego}), mande abraço para ${userName}. Máximo 50 palavras.`;
   try {
-    const text = await getMultiAIComment(prompt);
+    const text = await getMultiAIComment(
+      `DJ da rádio AIR. Tocando "${track.title}" de ${track.artist} (${track.genre}, ${track.year}). Curiosidade sobre artista, clima ${clima}, abraço para ${userName}. Máximo 3 frases.`
+    );
     if (text) addBubble(text, track, false);
   } catch {
-    addBubble(`🎤 Tocando "${track.title}" de ${track.artist}. Curtiu? Dá like! ❤️`, track, false);
+    addBubble(`🎤 Tocando "${track.title}" de ${track.artist}! ❤️`, track, false);
   }
 }
 
@@ -193,7 +194,7 @@ async function aiAbout() {
   showTyping();
   try {
     const text = await getMultiAIComment(
-      `Conta uma curiosidade fascinante sobre "${S.cur.title}" de ${S.cur.artist} — bastidores, impacto cultural, dados interessantes. Seja entusiasmado!`
+      `Curiosidade fascinante sobre "${S.cur.title}" de ${S.cur.artist} — bastidores, impacto cultural. Seja entusiasmado! Máximo 3 frases.`
     );
     hideTyping();
     addBubble(text, S.cur);
@@ -209,7 +210,7 @@ async function sendMotivationalMessage() {
   const hoje     = new Date().toLocaleDateString('pt-BR', { weekday: 'long' });
   try {
     const text = await getMultiAIComment(
-      `Mensagem motivacional curta (2 frases) para ${userName}. Mencione: dia (${hoje}), clima (${S.weather?.desc || 'agradável'}), aproveitar a música. Tom positivo.`
+      `Mensagem motivacional (2 frases) para ${userName}. Dia: ${hoje}. Clima: ${S.weather?.desc || 'agradável'}. Tom positivo.`
     );
     if (text) addBubble(text, null, false, '💪 Motivação');
   } catch { }
@@ -219,14 +220,14 @@ function startMotivationScheduler() {
   clearInterval(S.motivTimer);
   S.motivTimer = setInterval(() => {
     if (S.playing && S.user) sendMotivationalMessage();
-  }, 300000);
+  }, 300000); // 5 minutos
 }
 
 function scheduleAnnounce() {
   setTimeout(async () => {
     if (S.cur && S.playing) await announceTrack(S.cur);
     scheduleAnnounce();
-  }, 50000 + Math.random() * 70000);
+  }, 60000 + Math.random() * 90000); // 1-2.5 min
 }
 
 // ── Bubbles e Chat ────────────────────────────
@@ -294,7 +295,7 @@ async function sendChat() {
 
   showTyping(false);
   try {
-    const system = `Você é o DJ da rádio AIR. Responda como amigo animado, em português brasileiro, máximo 3 frases. Clima: ${S.weather?.desc || 'desconhecido'}. Música atual: ${S.cur?.title || 'nenhuma'}.`;
+    const system = `Você é DJ da rádio AIR. Amigo animado, português brasileiro, máximo 3 frases. Clima: ${S.weather?.desc || '?'}. Música: ${S.cur?.title || 'nenhuma'}.`;
     const text   = await getMultiAIComment(system + '\n\nUsuário: ' + msg);
     S.chatHistory.push({ role: 'assistant', content: text });
     hideTyping();
