@@ -74,7 +74,7 @@ function loadTrack(auto = false) {
     animViz(true);
     startSim(t.dur || 240);
     setStatus(`▶ ${t.title} — ${t.artist} · Vídeo carregando abaixo`, 'ok');
-    announceTrack(t);
+    // announceTrack agendado via scheduleAnnounce
   } else {
     S.playing = false;
     updPlayBtn();

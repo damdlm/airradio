@@ -4,6 +4,34 @@
 // ════════════════════════════════════════════
 
 const PROXY_BASE = '';
+// ── Fila de requisições (evita 429) ──────────
+const _aiQueue = [];
+let _aiRunning = false;
+
+async function queueAI(fn) {
+  return new Promise((resolve, reject) => {
+    _aiQueue.push({ fn, resolve, reject });
+    _processQueue();
+  });
+}
+
+async function _processQueue() {
+  if (_aiRunning || _aiQueue.length === 0) return;
+  _aiRunning = true;
+  const { fn, resolve, reject } = _aiQueue.shift();
+  try {
+    const result = await fn();
+    resolve(result);
+  } catch (e) {
+    reject(e);
+  } finally {
+    await new Promise(r => setTimeout(r, 4000));
+    _aiRunning = false;
+    _processQueue();
+  }
+}
+
+
 
 // ── Chaves de API ─────────────────────────────
 
@@ -104,6 +132,13 @@ async function callDeepSeek(prompt) {
 }
 
 async function getMultiAIComment(prompt) {
+  return queueAI(async () => { // rate limit queue
+  const _result = await _getMultiAICommentInner(prompt);
+  return _result;
+  });
+}
+
+async function _getMultiAICommentInner(prompt) {
   const prov = S.aiProvider;
   const keys = S.apiKeys;
 
@@ -184,7 +219,7 @@ function startMotivationScheduler() {
   clearInterval(S.motivTimer);
   S.motivTimer = setInterval(() => {
     if (S.playing && S.user) sendMotivationalMessage();
-  }, 120000);
+  }, 300000);
 }
 
 function scheduleAnnounce() {
