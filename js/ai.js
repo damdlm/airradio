@@ -68,7 +68,7 @@ async function callClaude(prompt) {
     headers: { 'Content-Type': 'application/json', 'x-api-key': S.apiKeys.anthropic },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001', max_tokens: 150,
-      system: 'Você é DJ de rádio brasileiro. Respostas CURTAS, máximo 2 frases, para serem faladas em voz. Sem emojis.',
+      system: 'Você é DJ de rádio brasileiro. Respostas CURTAS, máximo 2 frases, para serem faladas em voz. Sem emojis. Nunca traduza nomes de músicas, bandas ou artistas.',
       messages: [{ role: 'user', content: prompt }],
     }),
   });
@@ -98,7 +98,7 @@ async function callChatGPT(prompt) {
     body: JSON.stringify({
       model: 'gpt-3.5-turbo', max_tokens: 100,
       messages: [
-        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases. Sem emojis.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases. Sem emojis. Nunca traduza nomes de músicas, bandas ou artistas.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -116,7 +116,7 @@ async function callDeepSeek(prompt) {
     body: JSON.stringify({
       model: 'deepseek-chat', max_tokens: 100,
       messages: [
-        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases. Sem emojis.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases. Sem emojis. Nunca traduza nomes de músicas, bandas ou artistas.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -134,7 +134,7 @@ async function callGroq(prompt) {
     body: JSON.stringify({
       model: 'llama-3.1-8b-instant', max_tokens: 120,
       messages: [
-        { role: 'system', content: 'Você é DJ de rádio brasileiro. Respostas CURTAS (máximo 2 frases), diretas, para serem faladas em voz alta. Sem emojis. Em português brasileiro.' },
+        { role: 'system', content: 'Você é DJ de rádio brasileiro. Respostas CURTAS (máximo 2 frases), diretas, para serem faladas em voz alta. Sem emojis. Em português brasileiro. IMPORTANTE: nunca traduza nomes de músicas, bandas, artistas ou álbuns — mantenha sempre os nomes originais.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -152,7 +152,7 @@ async function callCohere(prompt) {
     body: JSON.stringify({
       model: 'command-r',
       messages: [
-        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases, sem emojis.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases, sem emojis. Nunca traduza nomes de músicas, bandas ou artistas.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -170,7 +170,7 @@ async function callMistral(prompt) {
     body: JSON.stringify({
       model: 'mistral-small-latest', max_tokens: 120,
       messages: [
-        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases, sem emojis.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases, sem emojis. Nunca traduza nomes de músicas, bandas ou artistas.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -239,15 +239,16 @@ function _buildPrompt(topic, track) {
   const clima = S.weather ? `${S.weather.temp}°C e ${S.weather.desc} em ${document.getElementById('wcity')?.textContent || 'sua cidade'}` : 'clima agradável';
   const nome = S.user?.name?.split(' ')[0] || 'ouvinte';
 
+  const regra = 'Nunca traduza nomes de músicas, bandas, artistas ou álbuns — use sempre o nome original.';
   const prompts = {
-    musica:     `Fale UMA curiosidade rápida e surpreendente sobre ${t}. Máximo 2 frases curtas, em português brasileiro, como se fosse ao vivo no rádio. Sem emojis.`,
-    banda:      `Fale UMA curiosidade fascinante sobre o artista ${track?.artist || 'desta música'}. Máximo 2 frases curtas, em português brasileiro, tom de rádio ao vivo. Sem emojis.`,
-    composicao: `Fale algo curioso sobre como ${t} foi composta ou gravada. Máximo 2 frases, em português, tom de rádio. Sem emojis.`,
-    piada:      `Conte UMA piada curta e leve relacionada a música ou ao artista ${track?.artist || ''}. Máximo 2 frases, em português. Sem emojis.`,
-    tempo:      `Como DJ de rádio, mencione o clima atual (${clima}) de forma descontraída. 1 frase curta. Sem emojis.`,
-    hora:       `Como DJ de rádio, informe que são ${hora} de ${dia} e faça uma saudação curta para ${nome}. 1 frase. Sem emojis.`,
-    noticia:    `Invente UMA notícia curiosa ou interessante sobre o mundo da música, tecnologia ou esporte de hoje. Máximo 2 frases, em português. Sem emojis.`,
-    motivacao:  `Fale uma frase motivacional curta e animada para ${nome} que está ouvindo música agora. 1 frase. Sem emojis.`,
+    musica:     `Fale UMA curiosidade rápida e surpreendente sobre ${t}. Máximo 2 frases curtas, em português brasileiro, como se fosse ao vivo no rádio. Sem emojis. ${regra}`,
+    banda:      `Fale UMA curiosidade fascinante sobre o artista ${track?.artist || 'desta música'}. Máximo 2 frases curtas, em português brasileiro, tom de rádio ao vivo. Sem emojis. ${regra}`,
+    composicao: `Fale algo curioso sobre como ${t} foi composta ou gravada. Máximo 2 frases, em português, tom de rádio. Sem emojis. ${regra}`,
+    piada:      `Conte UMA piada curta e leve relacionada a música ou ao artista ${track?.artist || ''}. Máximo 2 frases, em português. Sem emojis. ${regra}`,
+    tempo:      `Como DJ de rádio, mencione o clima atual (${clima}) de forma descontraída. 1 frase curta. Sem emojis. ${regra}`,
+    hora:       `Como DJ de rádio, informe que são ${hora} de ${dia} e faça uma saudação curta para ${nome}. 1 frase. Sem emojis. ${regra}`,
+    noticia:    `Invente UMA notícia curiosa ou interessante sobre o mundo da música, tecnologia ou esporte de hoje. Máximo 2 frases, em português. Sem emojis. ${regra}`,
+    motivacao:  `Fale uma frase motivacional curta e animada para ${nome} que está ouvindo música agora. 1 frase. Sem emojis. ${regra}`,
   };
 
   return prompts[topic] || prompts.musica;

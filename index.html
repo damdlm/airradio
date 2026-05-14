@@ -238,9 +238,12 @@
                 style="width:18px;height:18px;accent-color:var(--p);cursor:pointer">
             </div>
             <div class="slabel">Voz do DJ</div>
-            <select id="voice-select" onchange="setVoice(this.value)" style="margin-bottom:10px">
-              <option>Carregando vozes...</option>
-            </select>
+            <div style="display:flex;gap:7px;margin-bottom:10px;align-items:center">
+              <select id="voice-select" onchange="setVoice(this.value)" style="flex:1;margin-bottom:0">
+                <option>Carregando vozes...</option>
+              </select>
+              <button class="sbtn" onclick="testVoice()" style="padding:8px 11px;flex-shrink:0" title="Ouvir voz selecionada">🔊</button>
+            </div>
             <div class="slabel">Velocidade — <span id="rate-val">1</span>x</div>
             <input type="range" min="0.5" max="2" step="0.1" value="1" id="speech-rate"
               oninput="setSpeechRate(this.value)" style="width:100%;margin-bottom:12px">
