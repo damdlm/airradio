@@ -29,4 +29,9 @@ const S = {
   aiProvider: 'auto',
   transitionInProgress: false,
   motivTimer: null,
+  djTimer: null,
+  speechEnabled: false,
+  speechVoice: null,
+  speechRate: 1.0,
+  speechPitch: 1.0,
 };

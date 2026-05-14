@@ -129,7 +129,7 @@ async function next() {
     try {
       const comment = await generateTransitionComment(prevTrack, nextTrack);
       hideTyping();
-      if (comment) addBubble(comment, null, false, '🎙️ DJ (Transição)');
+      if (comment) { addBubble(comment, null, false, '🎙️ DJ — Passagem'); speak(comment, true); }
     } catch (err) {
       console.warn('Transição IA:', err);
       hideTyping();
@@ -158,7 +158,7 @@ async function prev() {
     try {
       const comment = await generateTransitionComment(prevTrack, nextTrack);
       hideTyping();
-      if (comment) addBubble(comment, null, false, '🎙️ DJ (Volta)');
+      if (comment) { addBubble(comment, null, false, '🎙️ DJ — Passagem'); speak(comment, true); }
     } catch (err) {
       console.warn('Transição IA:', err);
       hideTyping();

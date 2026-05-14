@@ -1,6 +1,6 @@
 // ════════════════════════════════════════════
 // AIR — Rádio Inteligente
-// ai.js — 7 provedores de IA com rate limiting
+// ai.js — 7 provedores de IA + DJ Falado
 // ════════════════════════════════════════════
 
 // ── Rate limiting: 1 chamada por vez, 4s de intervalo ──
@@ -40,8 +40,7 @@ function loadApiKeys() {
 }
 
 function fillApiFields() {
-  const ids = ['anthropic','google','openai','deepseek','groq','cohere','mistral'];
-  ids.forEach(id => {
+  ['anthropic','google','openai','deepseek','groq','cohere','mistral'].forEach(id => {
     const el = document.getElementById('key-' + id);
     if (el) el.value = S.apiKeys[id] || '';
   });
@@ -50,8 +49,7 @@ function fillApiFields() {
 }
 
 function saveApiKeys() {
-  const ids = ['anthropic','google','openai','deepseek','groq','cohere','mistral'];
-  ids.forEach(id => {
+  ['anthropic','google','openai','deepseek','groq','cohere','mistral'].forEach(id => {
     const el = document.getElementById('key-' + id);
     if (el) S.apiKeys[id] = el.value.trim();
   });
@@ -69,8 +67,8 @@ async function callClaude(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': S.apiKeys.anthropic },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001', max_tokens: 300,
-      system: 'Você é DJ de rádio brasileiro, descontraído, máximo 3 frases.',
+      model: 'claude-haiku-4-5-20251001', max_tokens: 150,
+      system: 'Você é DJ de rádio brasileiro. Respostas CURTAS, máximo 2 frases, para serem faladas em voz. Sem emojis.',
       messages: [{ role: 'user', content: prompt }],
     }),
   });
@@ -98,9 +96,9 @@ async function callChatGPT(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.openai}` },
     body: JSON.stringify({
-      model: 'gpt-3.5-turbo', max_tokens: 150,
+      model: 'gpt-3.5-turbo', max_tokens: 100,
       messages: [
-        { role: 'system', content: 'Você é DJ brasileiro, alegre, máximo 40 palavras.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases. Sem emojis.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -116,9 +114,9 @@ async function callDeepSeek(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.deepseek}` },
     body: JSON.stringify({
-      model: 'deepseek-chat', max_tokens: 150,
+      model: 'deepseek-chat', max_tokens: 100,
       messages: [
-        { role: 'system', content: 'Você é DJ brasileiro animado, máximo 3 frases.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases. Sem emojis.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -134,9 +132,9 @@ async function callGroq(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.groq}` },
     body: JSON.stringify({
-      model: 'llama-3.1-8b-instant', max_tokens: 200,
+      model: 'llama-3.1-8b-instant', max_tokens: 120,
       messages: [
-        { role: 'system', content: 'Você é DJ de rádio brasileiro, animado e descontraído. Máximo 3 frases curtas.' },
+        { role: 'system', content: 'Você é DJ de rádio brasileiro. Respostas CURTAS (máximo 2 frases), diretas, para serem faladas em voz alta. Sem emojis. Em português brasileiro.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -154,7 +152,7 @@ async function callCohere(prompt) {
     body: JSON.stringify({
       model: 'command-r',
       messages: [
-        { role: 'system', content: 'Você é DJ de rádio brasileiro, animado. Máximo 3 frases.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases, sem emojis.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -170,9 +168,9 @@ async function callMistral(prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.mistral}` },
     body: JSON.stringify({
-      model: 'mistral-small-latest', max_tokens: 200,
+      model: 'mistral-small-latest', max_tokens: 120,
       messages: [
-        { role: 'system', content: 'Você é DJ de rádio brasileiro, animado. Máximo 3 frases.' },
+        { role: 'system', content: 'DJ de rádio brasileiro. CURTO, máximo 2 frases, sem emojis.' },
         { role: 'user',   content: prompt },
       ],
     }),
@@ -199,15 +197,12 @@ async function getMultiAIComment(prompt) {
     const prov = S.aiProvider;
     const keys = S.apiKeys;
 
-    // Provedor específico
     if (prov !== 'auto') {
       const fn = PROVIDER_FNS[prov];
-      if (!fn) throw new Error('Provedor inválido');
-      if (!keys[prov]) throw new Error(`Chave ${prov} não configurada`);
+      if (!fn || !keys[prov]) throw new Error(`Chave ${prov} não configurada`);
       return await fn(prompt);
     }
 
-    // Auto: tenta em sequência priorizando os gratuitos
     const order = ['groq','mistral','cohere','google','anthropic','openai','deepseek'];
     const available = order.filter(p => keys[p]);
     if (available.length === 0) throw new Error('Nenhuma chave de IA configurada');
@@ -220,28 +215,121 @@ async function getMultiAIComment(prompt) {
   });
 }
 
-// ── Comentários do DJ ─────────────────────────
+// ── Tipos de comentário aleatório do DJ ───────
+
+const DJ_TOPICS = [
+  'musica',      // sobre a música tocando
+  'banda',       // sobre a banda/artista
+  'composicao',  // curiosidade de composição
+  'piada',       // piada musical
+  'tempo',       // clima na região
+  'hora',        // hora e saudação
+  'noticia',     // notícia relevante
+  'motivacao',   // frase motivacional
+];
+
+function _randomTopic() {
+  return DJ_TOPICS[Math.floor(Math.random() * DJ_TOPICS.length)];
+}
+
+function _buildPrompt(topic, track) {
+  const t    = track ? `"${track.title}" de ${track.artist} (${track.genre}, ${track.year})` : 'a rádio AIR';
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const dia  = new Date().toLocaleDateString('pt-BR', { weekday: 'long' });
+  const clima = S.weather ? `${S.weather.temp}°C e ${S.weather.desc} em ${document.getElementById('wcity')?.textContent || 'sua cidade'}` : 'clima agradável';
+  const nome = S.user?.name?.split(' ')[0] || 'ouvinte';
+
+  const prompts = {
+    musica:     `Fale UMA curiosidade rápida e surpreendente sobre ${t}. Máximo 2 frases curtas, em português brasileiro, como se fosse ao vivo no rádio. Sem emojis.`,
+    banda:      `Fale UMA curiosidade fascinante sobre o artista ${track?.artist || 'desta música'}. Máximo 2 frases curtas, em português brasileiro, tom de rádio ao vivo. Sem emojis.`,
+    composicao: `Fale algo curioso sobre como ${t} foi composta ou gravada. Máximo 2 frases, em português, tom de rádio. Sem emojis.`,
+    piada:      `Conte UMA piada curta e leve relacionada a música ou ao artista ${track?.artist || ''}. Máximo 2 frases, em português. Sem emojis.`,
+    tempo:      `Como DJ de rádio, mencione o clima atual (${clima}) de forma descontraída. 1 frase curta. Sem emojis.`,
+    hora:       `Como DJ de rádio, informe que são ${hora} de ${dia} e faça uma saudação curta para ${nome}. 1 frase. Sem emojis.`,
+    noticia:    `Invente UMA notícia curiosa ou interessante sobre o mundo da música, tecnologia ou esporte de hoje. Máximo 2 frases, em português. Sem emojis.`,
+    motivacao:  `Fale uma frase motivacional curta e animada para ${nome} que está ouvindo música agora. 1 frase. Sem emojis.`,
+  };
+
+  return prompts[topic] || prompts.musica;
+}
+
+// ── DJ automático entre músicas ───────────────
+
+let _djIntervalTimer = null;
+let _djIntervalMs = 45000; // 45s padrão
+
+function startDJScheduler() {
+  stopDJScheduler();
+  _scheduleDJ();
+}
+
+function stopDJScheduler() {
+  clearTimeout(_djIntervalTimer);
+  _djIntervalTimer = null;
+}
+
+function setDJInterval(seconds) {
+  _djIntervalMs = parseInt(seconds) * 1000;
+  localStorage.setItem('air_dj_interval', seconds);
+  document.getElementById('dj-interval-val').textContent = seconds + 's';
+  // Reinicia com novo intervalo
+  if (S.playing) startDJScheduler();
+}
+
+function _scheduleDJ() {
+  const jitter = _djIntervalMs + (Math.random() * 15000 - 7500); // ±7.5s aleatório
+  _djIntervalTimer = setTimeout(async () => {
+    if (S.playing && S.user && S.cur) {
+      await _fireDJComment();
+    }
+    _scheduleDJ(); // agenda próximo
+  }, jitter);
+}
+
+async function _fireDJComment() {
+  const topic = _randomTopic();
+  try {
+    const text = await getMultiAIComment(_buildPrompt(topic, S.cur));
+    if (!text) return;
+    // Mostra na bolha do chat
+    addBubble(text, topic === 'musica' || topic === 'banda' || topic === 'composicao' ? S.cur : null, false, _topicLabel(topic));
+    // Fala em voz
+    speak(text);
+  } catch (e) {
+    console.warn('DJ comment falhou:', e.message);
+  }
+}
+
+function _topicLabel(topic) {
+  const labels = {
+    musica: '🎵 DJ — Sobre a Música',
+    banda: '🎸 DJ — Sobre o Artista',
+    composicao: '🎼 DJ — Curiosidade',
+    piada: '😄 DJ — Piada',
+    tempo: '🌤 DJ — Clima',
+    hora: '🕐 DJ — Horário',
+    noticia: '📰 DJ — Notícia',
+    motivacao: '💪 DJ — Motivação',
+  };
+  return labels[topic] || '🎙️ DJ AIR';
+}
+
+// ── Transição entre músicas ───────────────────
 
 async function generateTransitionComment(prevTrack, nextTrack) {
-  const userName = S.user?.name?.split(' ')[0] || 'ouvinte';
-  const clima    = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : 'clima agradável';
-  const trafego  = S.traffic?.l || 'trânsito normal';
-  return await getMultiAIComment(
-    `DJ animado da rádio AIR. Tocou "${prevTrack.title}" de ${prevTrack.artist}. Próxima: "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Clima: ${clima}. Trânsito: ${trafego}. Saudação para ${userName}. Máximo 3 frases em português brasileiro.`
-  );
+  const nome  = S.user?.name?.split(' ')[0] || 'ouvinte';
+  const clima = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : '';
+  const prompt = `DJ de rádio ao vivo. Acabou "${prevTrack.title}" de ${prevTrack.artist}. Próxima: "${nextTrack.title}" de ${nextTrack.artist}. ${clima ? 'Clima: ' + clima + '.' : ''} Faça uma passagem animada, mencione ${nome}. Máximo 2 frases, sem emojis, português brasileiro.`;
+  return await getMultiAIComment(prompt);
 }
 
 async function announceTrack(track) {
   if (!track) return;
-  const userName = S.user?.name?.split(' ')[0] || 'ouvinte';
-  const clima    = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : 'clima agradável';
   try {
-    const text = await getMultiAIComment(
-      `DJ da rádio AIR. Tocando "${track.title}" de ${track.artist} (${track.genre}, ${track.year}). Curiosidade sobre o artista, clima ${clima}, abraço para ${userName}. Máximo 3 frases em português brasileiro.`
-    );
-    if (text) addBubble(text, track, false);
+    const text = await getMultiAIComment(_buildPrompt('musica', track));
+    if (text) { addBubble(text, track, false, '🎵 DJ — Sobre a Música'); speak(text); }
   } catch {
-    addBubble(`🎤 Tocando "${track.title}" de ${track.artist}! ❤️`, track, false);
+    // silencioso
   }
 }
 
@@ -250,41 +338,24 @@ async function aiAbout() {
   switchFeed('ai', document.querySelectorAll('.ftab')[1]);
   showTyping();
   try {
-    const text = await getMultiAIComment(
-      `Curiosidade fascinante sobre "${S.cur.title}" de ${S.cur.artist} — bastidores, impacto cultural, recordes. Entusiasmado! Máximo 3 frases em português brasileiro.`
-    );
+    const text = await getMultiAIComment(_buildPrompt('musica', S.cur));
     hideTyping();
-    addBubble(text, S.cur);
+    addBubble(text, S.cur, false, '🎵 DJ — Sobre a Música');
+    speak(text);
   } catch (e) {
     hideTyping();
-    addBubble(`📡 Erro: ${e.message}`, S.cur);
+    addBubble(`Erro: ${e.message}`, S.cur);
   }
 }
 
-async function sendMotivationalMessage() {
-  if (!S.user || !S.playing) return;
-  const userName = S.user.name?.split(' ')[0] || 'amigo';
-  const hoje     = new Date().toLocaleDateString('pt-BR', { weekday: 'long' });
-  try {
-    const text = await getMultiAIComment(
-      `Mensagem motivacional curta (2 frases) para ${userName}. Dia: ${hoje}. Clima: ${S.weather?.desc || 'agradável'}. Tom positivo, em português brasileiro.`
-    );
-    if (text) addBubble(text, null, false, '💪 Motivação');
-  } catch { }
-}
+// ── Agendadores legados (mantidos) ────────────
 
 function startMotivationScheduler() {
-  clearInterval(S.motivTimer);
-  S.motivTimer = setInterval(() => {
-    if (S.playing && S.user) sendMotivationalMessage();
-  }, 300000); // 5 min
+  // Agora tudo vai pelo DJ scheduler
 }
 
 function scheduleAnnounce() {
-  setTimeout(async () => {
-    if (S.cur && S.playing) await announceTrack(S.cur);
-    scheduleAnnounce();
-  }, 60000 + Math.random() * 90000); // 1~2.5 min
+  // Agora tudo vai pelo DJ scheduler
 }
 
 // ── Bubbles e Chat ────────────────────────────
@@ -347,22 +418,18 @@ async function sendChat() {
   ub.innerHTML = `<strong>Você:</strong> ${escHtml(msg)}`;
   document.getElementById('aimsgs').appendChild(ub);
 
-  S.chatHistory.push({ role: 'user', content: msg });
-  if (S.chatHistory.length > 24) S.chatHistory = S.chatHistory.slice(-24);
-
   showTyping(false);
   try {
-    const system = `Você é DJ da rádio AIR. Amigo animado, português brasileiro, máximo 3 frases. Clima: ${S.weather?.desc || '?'}. Música: ${S.cur?.title || 'nenhuma'}.`;
-    const text   = await getMultiAIComment(system + '\n\nUsuário: ' + msg);
-    S.chatHistory.push({ role: 'assistant', content: text });
+    const system = `DJ da rádio AIR. Amigo animado, português brasileiro, máximo 2 frases, sem emojis. Clima: ${S.weather?.desc || '?'}. Música: ${S.cur?.title || 'nenhuma'}.`;
+    const text   = await getMultiAIComment(system + '\nOuvinte disse: ' + msg);
     hideTyping();
     addBubble(text, null, false);
+    speak(text);
   } catch (e) {
     hideTyping();
-    addBubble(`📡 Erro: ${e.message}`, null, false);
+    addBubble(`Erro: ${e.message}`, null, false);
   }
   btn.disabled = false;
-  document.getElementById('aimsgs').scrollTop = 999999;
 }
 
 function switchFeed(t, el) {
