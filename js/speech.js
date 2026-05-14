@@ -156,6 +156,10 @@ function previewVoice(v) {
   utt.rate   = SPEECH.rate;
   utt.pitch  = SPEECH.pitch;
   utt.lang   = v.lang;
+  // Ativa visualizador no modo speech (barras reagem à voz)
+  if (S.playing) {
+    animViz(true, 'speech');
+  }
   SPEECH.synth.speak(utt);
 }
 
@@ -231,12 +235,15 @@ function _doSpeak(text) {
   utt.onend = () => {
     SPEECH.speaking = false;
     _muteYT(false);
+    // Volta para visualizador de música
+    if (S.playing) animViz(true, 'music');
     setTimeout(_nextSpeak, 600);
   };
   utt.onerror = (e) => {
     console.warn('Speech error:', e.error);
     SPEECH.speaking = false;
     _muteYT(false);
+    if (S.playing) animViz(true, 'music');
     setTimeout(_nextSpeak, 600);
   };
 
