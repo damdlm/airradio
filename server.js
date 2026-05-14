@@ -103,3 +103,60 @@ app.listen(PORT, () => {
   console.log(`\n🎵 AIR Rádio rodando em http://localhost:${PORT}`);
   console.log('   Proxy de IA ativo — CORS resolvido!\n');
 });
+
+// ── Proxy: Groq ──────────────────────────────
+app.post('/proxy/groq', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Groq não enviada' } });
+  try {
+    const { default: fetch } = await import('node-fetch');
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authHeader },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    console.error('[Groq]', err.message);
+    res.status(502).json({ error: { message: 'Erro ao conectar com Groq: ' + err.message } });
+  }
+});
+
+// ── Proxy: Cohere ────────────────────────────
+app.post('/proxy/cohere', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Cohere não enviada' } });
+  try {
+    const { default: fetch } = await import('node-fetch');
+    const response = await fetch('https://api.cohere.com/v2/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authHeader },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    console.error('[Cohere]', err.message);
+    res.status(502).json({ error: { message: 'Erro ao conectar com Cohere: ' + err.message } });
+  }
+});
+
+// ── Proxy: Mistral ───────────────────────────
+app.post('/proxy/mistral', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Mistral não enviada' } });
+  try {
+    const { default: fetch } = await import('node-fetch');
+    const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authHeader },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (err) {
+    console.error('[Mistral]', err.message);
+    res.status(502).json({ error: { message: 'Erro ao conectar com Mistral: ' + err.message } });
+  }
+});

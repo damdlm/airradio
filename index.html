@@ -234,19 +234,25 @@
             <div class="ptitle">🔑 Chaves de API para IAs (opcional)</div>
             <div class="slabel">Selecionar provedor</div>
             <select id="ai-provider" aria-label="Provedor de IA">
-              <option value="auto">🤖 Combinar todas (Multi‑IA)</option>
-              <option value="anthropic">🎙️ Claude (Anthropic)</option>
+              <option value="auto">🤖 Auto (tenta todas em sequência)</option>
+              <option value="groq">⚡ Groq — Llama 3.1 (gratuito)</option>
+              <option value="mistral">🌬️ Mistral (gratuito)</option>
+              <option value="cohere">🔷 Cohere (gratuito)</option>
               <option value="google">🌐 Gemini (Google)</option>
+              <option value="anthropic">🎙️ Claude (Anthropic)</option>
               <option value="openai">💬 ChatGPT (OpenAI)</option>
               <option value="deepseek">🧠 DeepSeek</option>
             </select>
-            <input class="inp" id="key-anthropic" type="password" placeholder="Chave Anthropic (sk-ant-...)"   autocomplete="off">
-            <input class="inp" id="key-google"    type="password" placeholder="Chave Google AI Studio (AIza...)" autocomplete="off">
-            <input class="inp" id="key-openai"    type="password" placeholder="Chave OpenAI (sk-...)"          autocomplete="off">
-            <input class="inp" id="key-deepseek"  type="password" placeholder="Chave DeepSeek"                 autocomplete="off">
+            <input class="inp" id="key-groq"      type="password" placeholder="Chave Groq (gsk_...)  — Gratuito!"    autocomplete="off">
+            <input class="inp" id="key-mistral"   type="password" placeholder="Chave Mistral — Gratuito!"            autocomplete="off">
+            <input class="inp" id="key-cohere"    type="password" placeholder="Chave Cohere — Gratuito!"             autocomplete="off">
+            <input class="inp" id="key-google"    type="password" placeholder="Chave Google AI Studio (AIza...)"     autocomplete="off">
+            <input class="inp" id="key-anthropic" type="password" placeholder="Chave Anthropic (sk-ant-...)"         autocomplete="off">
+            <input class="inp" id="key-openai"    type="password" placeholder="Chave OpenAI (sk-...)"               autocomplete="off">
+            <input class="inp" id="key-deepseek"  type="password" placeholder="Chave DeepSeek"                      autocomplete="off">
             <button class="sbtn" style="width:100%;padding:8px" onclick="saveApiKeys()">💾 Salvar chaves</button>
             <div style="font-size:10px;color:var(--text3);margin-top:6px;line-height:1.5">
-              As chaves ficam salvas localmente no seu navegador. Modo "Combinar todas" usa todas as IAs configuradas simultaneamente.
+              As chaves ficam salvas no seu navegador. Modo Auto tenta Groq → Mistral → Cohere → Gemini → Claude → OpenAI → DeepSeek até uma funcionar. Gratuitos recomendados: Groq, Mistral, Cohere.
             </div>
           </div>
         </div>

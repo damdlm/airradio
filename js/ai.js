@@ -1,9 +1,9 @@
 // ════════════════════════════════════════════
 // AIR — Rádio Inteligente
-// ai.js — Chamadas de IA com rate limiting
+// ai.js — 7 provedores de IA com rate limiting
 // ════════════════════════════════════════════
 
-// ── Rate limiting: 1 chamada por vez, 5s de intervalo ──
+// ── Rate limiting: 1 chamada por vez, 4s de intervalo ──
 let _aiLocked = false;
 const _aiQueue = [];
 
@@ -21,7 +21,7 @@ async function _drainQueue() {
   try { resolve(await fn()); }
   catch (e) { reject(e); }
   finally {
-    await new Promise(r => setTimeout(r, 5000));
+    await new Promise(r => setTimeout(r, 4000));
     _aiLocked = false;
     _drainQueue();
   }
@@ -40,25 +40,21 @@ function loadApiKeys() {
 }
 
 function fillApiFields() {
-  const fa = document.getElementById('key-anthropic');
-  const fg = document.getElementById('key-google');
-  const fo = document.getElementById('key-openai');
-  const fd = document.getElementById('key-deepseek');
+  const ids = ['anthropic','google','openai','deepseek','groq','cohere','mistral'];
+  ids.forEach(id => {
+    const el = document.getElementById('key-' + id);
+    if (el) el.value = S.apiKeys[id] || '';
+  });
   const fp = document.getElementById('ai-provider');
-  if (fa) fa.value = S.apiKeys.anthropic || '';
-  if (fg) fg.value = S.apiKeys.google    || '';
-  if (fo) fo.value = S.apiKeys.openai    || '';
-  if (fd) fd.value = S.apiKeys.deepseek  || '';
   if (fp) fp.value = S.aiProvider;
 }
 
 function saveApiKeys() {
-  S.apiKeys = {
-    anthropic: document.getElementById('key-anthropic').value.trim(),
-    google:    document.getElementById('key-google').value.trim(),
-    openai:    document.getElementById('key-openai').value.trim(),
-    deepseek:  document.getElementById('key-deepseek').value.trim(),
-  };
+  const ids = ['anthropic','google','openai','deepseek','groq','cohere','mistral'];
+  ids.forEach(id => {
+    const el = document.getElementById('key-' + id);
+    if (el) S.apiKeys[id] = el.value.trim();
+  });
   S.aiProvider = document.getElementById('ai-provider').value;
   localStorage.setItem('air_api_keys', JSON.stringify(S.apiKeys));
   localStorage.setItem('air_ai_provider', S.aiProvider);
@@ -132,34 +128,95 @@ async function callDeepSeek(prompt) {
   return data.choices[0].message.content;
 }
 
-// Tenta cada IA em sequência (não em paralelo) para evitar 429
+async function callGroq(prompt) {
+  if (!S.apiKeys.groq) throw new Error('Chave Groq não configurada');
+  const res = await fetch('/proxy/groq', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.groq}` },
+    body: JSON.stringify({
+      model: 'llama-3.1-8b-instant', max_tokens: 200,
+      messages: [
+        { role: 'system', content: 'Você é DJ de rádio brasileiro, animado e descontraído. Máximo 3 frases curtas.' },
+        { role: 'user',   content: prompt },
+      ],
+    }),
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.choices[0].message.content;
+}
+
+async function callCohere(prompt) {
+  if (!S.apiKeys.cohere) throw new Error('Chave Cohere não configurada');
+  const res = await fetch('/proxy/cohere', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.cohere}` },
+    body: JSON.stringify({
+      model: 'command-r',
+      messages: [
+        { role: 'system', content: 'Você é DJ de rádio brasileiro, animado. Máximo 3 frases.' },
+        { role: 'user',   content: prompt },
+      ],
+    }),
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+  return data.message?.content?.[0]?.text || data.text;
+}
+
+async function callMistral(prompt) {
+  if (!S.apiKeys.mistral) throw new Error('Chave Mistral não configurada');
+  const res = await fetch('/proxy/mistral', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${S.apiKeys.mistral}` },
+    body: JSON.stringify({
+      model: 'mistral-small-latest', max_tokens: 200,
+      messages: [
+        { role: 'system', content: 'Você é DJ de rádio brasileiro, animado. Máximo 3 frases.' },
+        { role: 'user',   content: prompt },
+      ],
+    }),
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.choices[0].message.content;
+}
+
+// ── Orquestrador ──────────────────────────────
+
+const PROVIDER_FNS = {
+  anthropic: callClaude,
+  google:    callGemini,
+  openai:    callChatGPT,
+  deepseek:  callDeepSeek,
+  groq:      callGroq,
+  cohere:    callCohere,
+  mistral:   callMistral,
+};
+
 async function getMultiAIComment(prompt) {
   return queueAI(async () => {
     const prov = S.aiProvider;
     const keys = S.apiKeys;
 
-    // Provedor específico selecionado
-    if (prov === 'anthropic' && keys.anthropic) return await callClaude(prompt);
-    if (prov === 'google'    && keys.google)    return await callGemini(prompt);
-    if (prov === 'openai'    && keys.openai)    return await callChatGPT(prompt);
-    if (prov === 'deepseek'  && keys.deepseek)  return await callDeepSeek(prompt);
-
-    // Modo auto: tenta cada uma EM SEQUÊNCIA (não paralelo) até uma funcionar
-    if (prov === 'auto') {
-      const providers = [];
-      if (keys.google)    providers.push(() => callGemini(prompt));
-      if (keys.anthropic) providers.push(() => callClaude(prompt));
-      if (keys.openai)    providers.push(() => callChatGPT(prompt));
-      if (keys.deepseek)  providers.push(() => callDeepSeek(prompt));
-      if (providers.length === 0) throw new Error('Nenhuma chave de IA configurada');
-
-      for (const fn of providers) {
-        try { return await fn(); } catch (e) { console.warn('IA falhou, tentando próxima:', e.message); }
-      }
-      throw new Error('Todas as IAs falharam');
+    // Provedor específico
+    if (prov !== 'auto') {
+      const fn = PROVIDER_FNS[prov];
+      if (!fn) throw new Error('Provedor inválido');
+      if (!keys[prov]) throw new Error(`Chave ${prov} não configurada`);
+      return await fn(prompt);
     }
 
-    throw new Error('Nenhuma IA selecionada ou chave configurada');
+    // Auto: tenta em sequência priorizando os gratuitos
+    const order = ['groq','mistral','cohere','google','anthropic','openai','deepseek'];
+    const available = order.filter(p => keys[p]);
+    if (available.length === 0) throw new Error('Nenhuma chave de IA configurada');
+
+    for (const p of available) {
+      try { return await PROVIDER_FNS[p](prompt); }
+      catch (e) { console.warn(`[${p}] falhou:`, e.message); }
+    }
+    throw new Error('Todas as IAs falharam');
   });
 }
 
@@ -170,7 +227,7 @@ async function generateTransitionComment(prevTrack, nextTrack) {
   const clima    = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : 'clima agradável';
   const trafego  = S.traffic?.l || 'trânsito normal';
   return await getMultiAIComment(
-    `Comente como DJ animado de rádio brasileira (AIR). Tocou "${prevTrack.title}" de ${prevTrack.artist}. Agora: "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Clima: ${clima}. Trânsito: ${trafego}. Saudação para ${userName}. Máximo 3 frases.`
+    `DJ animado da rádio AIR. Tocou "${prevTrack.title}" de ${prevTrack.artist}. Próxima: "${nextTrack.title}" de ${nextTrack.artist} (${nextTrack.genre}). Clima: ${clima}. Trânsito: ${trafego}. Saudação para ${userName}. Máximo 3 frases em português brasileiro.`
   );
 }
 
@@ -180,7 +237,7 @@ async function announceTrack(track) {
   const clima    = S.weather ? `${S.weather.temp}°C, ${S.weather.desc}` : 'clima agradável';
   try {
     const text = await getMultiAIComment(
-      `DJ da rádio AIR. Tocando "${track.title}" de ${track.artist} (${track.genre}, ${track.year}). Curiosidade sobre artista, clima ${clima}, abraço para ${userName}. Máximo 3 frases.`
+      `DJ da rádio AIR. Tocando "${track.title}" de ${track.artist} (${track.genre}, ${track.year}). Curiosidade sobre o artista, clima ${clima}, abraço para ${userName}. Máximo 3 frases em português brasileiro.`
     );
     if (text) addBubble(text, track, false);
   } catch {
@@ -194,7 +251,7 @@ async function aiAbout() {
   showTyping();
   try {
     const text = await getMultiAIComment(
-      `Curiosidade fascinante sobre "${S.cur.title}" de ${S.cur.artist} — bastidores, impacto cultural. Seja entusiasmado! Máximo 3 frases.`
+      `Curiosidade fascinante sobre "${S.cur.title}" de ${S.cur.artist} — bastidores, impacto cultural, recordes. Entusiasmado! Máximo 3 frases em português brasileiro.`
     );
     hideTyping();
     addBubble(text, S.cur);
@@ -210,7 +267,7 @@ async function sendMotivationalMessage() {
   const hoje     = new Date().toLocaleDateString('pt-BR', { weekday: 'long' });
   try {
     const text = await getMultiAIComment(
-      `Mensagem motivacional (2 frases) para ${userName}. Dia: ${hoje}. Clima: ${S.weather?.desc || 'agradável'}. Tom positivo.`
+      `Mensagem motivacional curta (2 frases) para ${userName}. Dia: ${hoje}. Clima: ${S.weather?.desc || 'agradável'}. Tom positivo, em português brasileiro.`
     );
     if (text) addBubble(text, null, false, '💪 Motivação');
   } catch { }
@@ -220,14 +277,14 @@ function startMotivationScheduler() {
   clearInterval(S.motivTimer);
   S.motivTimer = setInterval(() => {
     if (S.playing && S.user) sendMotivationalMessage();
-  }, 300000); // 5 minutos
+  }, 300000); // 5 min
 }
 
 function scheduleAnnounce() {
   setTimeout(async () => {
     if (S.cur && S.playing) await announceTrack(S.cur);
     scheduleAnnounce();
-  }, 60000 + Math.random() * 90000); // 1-2.5 min
+  }, 60000 + Math.random() * 90000); // 1~2.5 min
 }
 
 // ── Bubbles e Chat ────────────────────────────
