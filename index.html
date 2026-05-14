@@ -230,6 +230,32 @@
               Salvar e atualizar fila
             </button>
           </div>
+          <div class="psec">
+            <div class="ptitle">🎙️ DJ Falado</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+              <span style="font-size:13px;color:var(--text2);flex:1">Falar entre músicas</span>
+              <input type="checkbox" id="speech-toggle" onchange="toggleSpeech(this)"
+                style="width:18px;height:18px;accent-color:var(--p);cursor:pointer">
+            </div>
+            <div class="slabel">Voz do DJ</div>
+            <select id="voice-select" onchange="setVoice(this.value)" style="margin-bottom:10px">
+              <option>Carregando vozes...</option>
+            </select>
+            <div class="slabel">Velocidade — <span id="rate-val">1</span>x</div>
+            <input type="range" min="0.5" max="2" step="0.1" value="1" id="speech-rate"
+              oninput="setSpeechRate(this.value)" style="width:100%;margin-bottom:12px">
+            <div class="slabel">Tom — <span id="pitch-val">1</span></div>
+            <input type="range" min="0.5" max="2" step="0.1" value="1" id="speech-pitch"
+              oninput="setSpeechPitch(this.value)" style="width:100%;margin-bottom:14px">
+            <div class="slabel">Intervalo entre comentários — <span id="dj-interval-val">45s</span></div>
+            <input type="range" min="20" max="120" step="5" value="45" id="dj-interval"
+              oninput="setDJInterval(this.value)" style="width:100%;margin-bottom:14px">
+            <div style="display:flex;gap:8px">
+              <button class="sbtn" style="flex:1;padding:9px" onclick="testVoice()">🔊 Testar voz</button>
+              <button class="sbtn" style="flex:1;padding:9px" onclick="_fireDJComment()">🎲 Comentário agora</button>
+            </div>
+          </div>
+
           <div class="psec api-config">
             <div class="ptitle">🔑 Chaves de API para IAs (opcional)</div>
             <div class="slabel">Selecionar provedor</div>

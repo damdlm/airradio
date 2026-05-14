@@ -94,5 +94,12 @@ setInterval(persistUser, 60000);
 
 // Carrega chaves salvas (elementos já existem no DOM)
 document.addEventListener('DOMContentLoaded', () => {
+  // Carrega chaves do localStorage imediatamente (sem depender dos campos do DOM)
+  try {
+    const saved = localStorage.getItem('air_api_keys');
+    if (saved) S.apiKeys = Object.assign(S.apiKeys, JSON.parse(saved));
+    const prov = localStorage.getItem('air_ai_provider');
+    if (prov) S.aiProvider = prov;
+  } catch(e) { console.warn('Erro ao carregar chaves:', e); }
   loadApiKeys();
 });
