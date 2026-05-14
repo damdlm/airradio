@@ -28,7 +28,31 @@ function toast(msg) {
 
 // ── Waveform Visualizer ───────────────────────
 
-// buildViz e animViz agora em visualizer.js
+function buildViz() {
+  const el = document.getElementById('visualizer');
+  if (!el) return;
+  el.innerHTML = '';
+  VIZ.bars = [];
+  VIZ.smoothed = [];
+  for (let i = 0; i < 32; i++) {
+    const b = document.createElement('div');
+    b.className = 'vbar';
+    el.appendChild(b);
+    VIZ.bars.push(b);
+    VIZ.smoothed.push(3);
+  }
+}
+
+function animViz(on) {
+  cancelAnimationFrame(VIZ.frame);
+  if (!on) {
+    VIZ.mode = 'idle';
+    _decayToIdle();
+    return;
+  }
+  VIZ.mode = 'music';
+  _loop();
+}
 
 // ── Status bar ────────────────────────────────
 
