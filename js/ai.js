@@ -1,6 +1,6 @@
 // ════════════════════════════════════════════
 // AIR — Rádio Inteligente
-// ai.js — 7 provedores de IA + DJ Falado
+// ai.js — 7 provedores de IA + DJ Falado (com persistência via server)
 // ════════════════════════════════════════════
 
 // ── Rate limiting: 1 chamada por vez, 4s de intervalo ──
@@ -27,16 +27,25 @@ async function _drainQueue() {
   }
 }
 
-// ── Chaves de API ─────────────────────────────
+// ── Chaves de API (agora via servidor) ────────────────
 
-function loadApiKeys() {
+// Carrega as chaves do servidor e preenche os inputs
+async function loadApiKeys() {
   try {
-    const saved = localStorage.getItem('air_api_keys');
-    if (saved) S.apiKeys = JSON.parse(saved);
-    const prov = localStorage.getItem('air_ai_provider');
-    if (prov) S.aiProvider = prov;
-  } catch { }
-  fillApiFields();
+    const res = await fetch('/api/keys');
+    if (!res.ok) throw new Error('Erro ao carregar chaves');
+    const keys = await res.json();
+    S.apiKeys = keys;
+    fillApiFields();
+  } catch (err) {
+    console.warn('Falha ao carregar chaves do servidor:', err);
+    // Fallback: tenta carregar do localStorage (caso ainda exista)
+    try {
+      const saved = localStorage.getItem('air_api_keys');
+      if (saved) S.apiKeys = JSON.parse(saved);
+    } catch {}
+    fillApiFields();
+  }
 }
 
 function fillApiFields() {
@@ -48,18 +57,38 @@ function fillApiFields() {
   if (fp) fp.value = S.aiProvider;
 }
 
-function saveApiKeys() {
-  ['anthropic','google','openai','deepseek','groq','cohere','mistral'].forEach(id => {
+// Salva as chaves no servidor (e também atualiza S.apiKeys)
+async function saveApiKeys() {
+  const newKeys = {};
+  for (const id of ['anthropic','google','openai','deepseek','groq','cohere','mistral']) {
     const el = document.getElementById('key-' + id);
-    if (el) S.apiKeys[id] = el.value.trim();
+    if (el) newKeys[id] = el.value.trim();
+  }
+  // Salva cada chave individualmente no servidor
+  const promises = Object.entries(newKeys).map(async ([provider, key]) => {
+    if (key !== undefined) {
+      const res = await fetch('/api/keys', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, key })
+      });
+      if (!res.ok) throw new Error(`Erro ao salvar ${provider}`);
+    }
   });
-  S.aiProvider = document.getElementById('ai-provider').value;
-  localStorage.setItem('air_api_keys', JSON.stringify(S.apiKeys));
-  localStorage.setItem('air_ai_provider', S.aiProvider);
-  toast('💾 Chaves salvas! IAs prontas.');
+  try {
+    await Promise.all(promises);
+    S.apiKeys = newKeys;
+    S.aiProvider = document.getElementById('ai-provider').value;
+    localStorage.setItem('air_ai_provider', S.aiProvider); // provedor ainda pode ficar local
+    toast('💾 Chaves salvas no servidor! IAs prontas.');
+  } catch (err) {
+    toast('❌ Erro ao salvar chaves no servidor: ' + err.message);
+  }
 }
 
-// ── Chamadas de API ───────────────────────────
+// ── Chamadas de API (mesmas funções, mas agora usam S.apiKeys) ──
+// Nota: as funções callClaude, callGemini, etc. permanecem idênticas,
+// pois já utilizam S.apiKeys. Apenas a persistência mudou.
 
 async function callClaude(prompt) {
   if (!S.apiKeys.anthropic) throw new Error('Chave Anthropic não configurada');
@@ -180,7 +209,7 @@ async function callMistral(prompt) {
   return data.choices[0].message.content;
 }
 
-// ── Orquestrador ──────────────────────────────
+// ── Orquestrador (igual) ──────────────────────────────
 
 const PROVIDER_FNS = {
   anthropic: callClaude,
@@ -215,17 +244,10 @@ async function getMultiAIComment(prompt) {
   });
 }
 
-// ── Tipos de comentário aleatório do DJ ───────
+// ── Tipos de comentário aleatório do DJ (igual ao original) ──
 
 const DJ_TOPICS = [
-  'musica',      // sobre a música tocando
-  'banda',       // sobre a banda/artista
-  'composicao',  // curiosidade de composição
-  'piada',       // piada musical
-  'tempo',       // clima na região
-  'hora',        // hora e saudação
-  'noticia',     // notícia relevante
-  'motivacao',   // frase motivacional
+  'musica', 'banda', 'composicao', 'piada', 'tempo', 'hora', 'noticia', 'motivacao',
 ];
 
 function _randomTopic() {
@@ -250,14 +272,13 @@ function _buildPrompt(topic, track) {
     noticia:    `Invente UMA notícia curiosa ou interessante sobre o mundo da música, tecnologia ou esporte de hoje. Máximo 2 frases, em português. Sem emojis. ${regra}`,
     motivacao:  `Fale uma frase motivacional curta e animada para ${nome} que está ouvindo música agora. 1 frase. Sem emojis. ${regra}`,
   };
-
   return prompts[topic] || prompts.musica;
 }
 
-// ── DJ automático entre músicas ───────────────
+// ── DJ automático entre músicas (idêntico) ───────────────
 
 let _djIntervalTimer = null;
-let _djIntervalMs = 45000; // 45s padrão
+let _djIntervalMs = 45000;
 
 function startDJScheduler() {
   stopDJScheduler();
@@ -273,17 +294,16 @@ function setDJInterval(seconds) {
   _djIntervalMs = parseInt(seconds) * 1000;
   localStorage.setItem('air_dj_interval', seconds);
   document.getElementById('dj-interval-val').textContent = seconds + 's';
-  // Reinicia com novo intervalo
   if (S.playing) startDJScheduler();
 }
 
 function _scheduleDJ() {
-  const jitter = _djIntervalMs + (Math.random() * 15000 - 7500); // ±7.5s aleatório
+  const jitter = _djIntervalMs + (Math.random() * 15000 - 7500);
   _djIntervalTimer = setTimeout(async () => {
     if (S.playing && S.user && S.cur) {
       await _fireDJComment();
     }
-    _scheduleDJ(); // agenda próximo
+    _scheduleDJ();
   }, jitter);
 }
 
@@ -292,9 +312,7 @@ async function _fireDJComment() {
   try {
     const text = await getMultiAIComment(_buildPrompt(topic, S.cur));
     if (!text) return;
-    // Mostra na bolha do chat
     addBubble(text, topic === 'musica' || topic === 'banda' || topic === 'composicao' ? S.cur : null, false, _topicLabel(topic));
-    // Fala em voz
     speak(text);
   } catch (e) {
     console.warn('DJ comment falhou:', e.message);
@@ -315,7 +333,7 @@ function _topicLabel(topic) {
   return labels[topic] || '🎙️ DJ AIR';
 }
 
-// ── Transição entre músicas ───────────────────
+// ── Transição entre músicas ────────────────────────────
 
 async function generateTransitionComment(prevTrack, nextTrack) {
   const nome  = S.user?.name?.split(' ')[0] || 'ouvinte';
@@ -329,9 +347,7 @@ async function announceTrack(track) {
   try {
     const text = await getMultiAIComment(_buildPrompt('musica', track));
     if (text) { addBubble(text, track, false, '🎵 DJ — Sobre a Música'); speak(text); }
-  } catch {
-    // silencioso
-  }
+  } catch {}
 }
 
 async function aiAbout() {
@@ -349,17 +365,7 @@ async function aiAbout() {
   }
 }
 
-// ── Agendadores legados (mantidos) ────────────
-
-function startMotivationScheduler() {
-  // Agora tudo vai pelo DJ scheduler
-}
-
-function scheduleAnnounce() {
-  // Agora tudo vai pelo DJ scheduler
-}
-
-// ── Bubbles e Chat ────────────────────────────
+// ── Bubbles e Chat (mantidos idênticos) ─────────────────
 
 let typEl = null;
 
