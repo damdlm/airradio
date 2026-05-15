@@ -1,23 +1,79 @@
 // ════════════════════════════════════════════
 // AIR — Rádio Inteligente
-// server.js — Proxy para chamadas de IA (resolve CORS)
-// ════════════════════════════════════════════
-// Uso: node server.js
-// Acesse em: http://localhost:3000
+// server.js — Proxy para chamadas de IA + persistência de chaves
 // ════════════════════════════════════════════
 
 const express = require('express');
 const cors    = require('cors');
 const path    = require('path');
+const fs      = require('fs');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+
+// Caminho do arquivo de chaves
+const KEYS_FILE = path.join(__dirname, 'keys.json');
+
+// Garante que o arquivo keys.json existe
+function initKeysFile() {
+  if (!fs.existsSync(KEYS_FILE)) {
+    fs.writeFileSync(KEYS_FILE, JSON.stringify({}, null, 2));
+  }
+}
+initKeysFile();
+
+// Helper para ler as chaves
+function readKeys() {
+  try {
+    const data = fs.readFileSync(KEYS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
+}
+
+// Helper para salvar as chaves
+function saveKeys(keys) {
+  fs.writeFileSync(KEYS_FILE, JSON.stringify(keys, null, 2));
+}
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-// ── Proxy: Claude (Anthropic) ────────────────
+// ── ROTAS PARA GERENCIAR CHAVES ─────────────────
+// Retorna todas as chaves
+app.get('/api/keys', (req, res) => {
+  const keys = readKeys();
+  res.json(keys);
+});
+
+// Salva/atualiza uma chave
+app.post('/api/keys', (req, res) => {
+  const { provider, key } = req.body;
+  if (!provider || key === undefined) {
+    return res.status(400).json({ error: 'Provider e key são obrigatórios' });
+  }
+  const keys = readKeys();
+  keys[provider] = key;
+  saveKeys(keys);
+  res.json({ success: true, message: `Chave para ${provider} salva` });
+});
+
+// Remove uma chave
+app.delete('/api/keys/:provider', (req, res) => {
+  const { provider } = req.params;
+  const keys = readKeys();
+  if (keys[provider]) {
+    delete keys[provider];
+    saveKeys(keys);
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Provedor não encontrado' });
+  }
+});
+
+// ── PROXYS (mantidos iguais) ───────────────────
 app.post('/proxy/anthropic', async (req, res) => {
   const apiKey = req.headers['x-api-key'];
   if (!apiKey) return res.status(400).json({ error: { message: 'Chave Anthropic não enviada' } });
@@ -40,7 +96,6 @@ app.post('/proxy/anthropic', async (req, res) => {
   }
 });
 
-// ── Proxy: Gemini (Google) ───────────────────
 app.post('/proxy/google', async (req, res) => {
   const apiKey = req.query.key || req.headers['x-google-key'];
   if (!apiKey) return res.status(400).json({ error: { message: 'Chave Google não enviada' } });
@@ -61,7 +116,6 @@ app.post('/proxy/google', async (req, res) => {
   }
 });
 
-// ── Proxy: OpenAI (ChatGPT) ──────────────────
 app.post('/proxy/openai', async (req, res) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(400).json({ error: { message: 'Chave OpenAI não enviada' } });
@@ -80,7 +134,6 @@ app.post('/proxy/openai', async (req, res) => {
   }
 });
 
-// ── Proxy: DeepSeek ──────────────────────────
 app.post('/proxy/deepseek', async (req, res) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(400).json({ error: { message: 'Chave DeepSeek não enviada' } });
@@ -99,8 +152,6 @@ app.post('/proxy/deepseek', async (req, res) => {
   }
 });
 
-
-// ── Proxy: ElevenLabs TTS ────────────────────
 app.post('/proxy/elevenlabs/:voiceId', async (req, res) => {
   const apiKey  = req.headers['xi-api-key'];
   const voiceId = req.params.voiceId;
@@ -127,12 +178,7 @@ app.post('/proxy/elevenlabs/:voiceId', async (req, res) => {
     res.status(502).json({ detail: { message: 'Erro ao conectar com ElevenLabs: ' + err.message } });
   }
 });
-app.listen(PORT, () => {
-  console.log(`\n🎵 AIR Rádio rodando em http://localhost:${PORT}`);
-  console.log('   Proxy de IA ativo — CORS resolvido!\n');
-});
 
-// ── Proxy: Groq ──────────────────────────────
 app.post('/proxy/groq', async (req, res) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(400).json({ error: { message: 'Chave Groq não enviada' } });
@@ -151,7 +197,6 @@ app.post('/proxy/groq', async (req, res) => {
   }
 });
 
-// ── Proxy: Cohere ────────────────────────────
 app.post('/proxy/cohere', async (req, res) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(400).json({ error: { message: 'Chave Cohere não enviada' } });
@@ -170,7 +215,6 @@ app.post('/proxy/cohere', async (req, res) => {
   }
 });
 
-// ── Proxy: Mistral ───────────────────────────
 app.post('/proxy/mistral', async (req, res) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(400).json({ error: { message: 'Chave Mistral não enviada' } });
@@ -187,4 +231,9 @@ app.post('/proxy/mistral', async (req, res) => {
     console.error('[Mistral]', err.message);
     res.status(502).json({ error: { message: 'Erro ao conectar com Mistral: ' + err.message } });
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`\n🎵 AIR Rádio rodando em http://localhost:${PORT}`);
+  console.log('   Proxy de IA ativo | Chaves salvas em keys.json\n`);
 });
