@@ -52,7 +52,7 @@ app.get('/api/keys', (req, res) => {
 app.post('/api/keys', (req, res) => {
   const { provider, key } = req.body;
   if (!provider || key === undefined) {
-    return res.status(400).json({ error: 'Provider e key são obrigatórios' });
+    return res.status(400).json({ error: 'Provider e key sao obrigatorios' });
   }
   const keys = readKeys();
   keys[provider] = key;
@@ -69,14 +69,14 @@ app.delete('/api/keys/:provider', (req, res) => {
     saveKeys(keys);
     res.json({ success: true });
   } else {
-    res.status(404).json({ error: 'Provedor não encontrado' });
+    res.status(404).json({ error: 'Provedor nao encontrado' });
   }
 });
 
-// ── PROXYS (mantidos iguais) ───────────────────
+// ── PROXYS ─────────────────────────────────────
 app.post('/proxy/anthropic', async (req, res) => {
   const apiKey = req.headers['x-api-key'];
-  if (!apiKey) return res.status(400).json({ error: { message: 'Chave Anthropic não enviada' } });
+  if (!apiKey) return res.status(400).json({ error: { message: 'Chave Anthropic nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -98,7 +98,7 @@ app.post('/proxy/anthropic', async (req, res) => {
 
 app.post('/proxy/google', async (req, res) => {
   const apiKey = req.query.key || req.headers['x-google-key'];
-  if (!apiKey) return res.status(400).json({ error: { message: 'Chave Google não enviada' } });
+  if (!apiKey) return res.status(400).json({ error: { message: 'Chave Google nao enviada' } });
   const model = req.query.model || 'gemini-1.5-flash';
   const url   = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   try {
@@ -118,7 +118,7 @@ app.post('/proxy/google', async (req, res) => {
 
 app.post('/proxy/openai', async (req, res) => {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(400).json({ error: { message: 'Chave OpenAI não enviada' } });
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave OpenAI nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -136,7 +136,7 @@ app.post('/proxy/openai', async (req, res) => {
 
 app.post('/proxy/deepseek', async (req, res) => {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(400).json({ error: { message: 'Chave DeepSeek não enviada' } });
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave DeepSeek nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
@@ -155,7 +155,7 @@ app.post('/proxy/deepseek', async (req, res) => {
 app.post('/proxy/elevenlabs/:voiceId', async (req, res) => {
   const apiKey  = req.headers['xi-api-key'];
   const voiceId = req.params.voiceId;
-  if (!apiKey) return res.status(400).json({ detail: { message: 'Chave ElevenLabs não enviada' } });
+  if (!apiKey) return res.status(400).json({ detail: { message: 'Chave ElevenLabs nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
@@ -181,7 +181,7 @@ app.post('/proxy/elevenlabs/:voiceId', async (req, res) => {
 
 app.post('/proxy/groq', async (req, res) => {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Groq não enviada' } });
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Groq nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -199,7 +199,7 @@ app.post('/proxy/groq', async (req, res) => {
 
 app.post('/proxy/cohere', async (req, res) => {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Cohere não enviada' } });
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Cohere nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch('https://api.cohere.com/v2/chat', {
@@ -217,7 +217,7 @@ app.post('/proxy/cohere', async (req, res) => {
 
 app.post('/proxy/mistral', async (req, res) => {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Mistral não enviada' } });
+  if (!authHeader) return res.status(400).json({ error: { message: 'Chave Mistral nao enviada' } });
   try {
     const { default: fetch } = await import('node-fetch');
     const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
@@ -234,6 +234,6 @@ app.post('/proxy/mistral', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🎵 AIR Rádio rodando em http://localhost:${PORT}`);
-  console.log('   Proxy de IA ativo | Chaves salvas em keys.json\n`);
+  console.log(`\nAIR Radio rodando em http://localhost:${PORT}`);
+  console.log('Proxy de IA ativo | Chaves salvas em keys.json\n');
 });
