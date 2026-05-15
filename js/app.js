@@ -62,11 +62,14 @@ function setStatus(msg, type = 'info') {
   b.className   = 'sbar ' + type;
 }
 
-// ── App init ──────────────────────────────────
+// ── App init (modificada para carregar chaves antes de iniciar) ──
 
-function enterApp() {
+async function enterApp() {
   document.getElementById('auth').classList.add('gone');
   document.getElementById('app').classList.add('on');
+
+  // Carrega as chaves do servidor antes de prosseguir
+  await loadApiKeys();   // <--- AGUARDA AS CHAVES
 
   const n = S.user.name || S.user.email.split('@')[0];
   document.getElementById('tav').textContent  = n[0].toUpperCase();
@@ -87,19 +90,16 @@ function enterApp() {
   toast(`🎵 Bem-vindo(a), ${n}!`);
 }
 
-// ── Bootstrap ─────────────────────────────────
+// ── Bootstrap (carrega provedor e depois chaves) ──
 
-// Salva automaticamente a cada minuto
 setInterval(persistUser, 60000);
 
-// Carrega chaves salvas (elementos já existem no DOM)
-document.addEventListener('DOMContentLoaded', () => {
-  // Carrega chaves do localStorage imediatamente (sem depender dos campos do DOM)
-  try {
-    const saved = localStorage.getItem('air_api_keys');
-    if (saved) S.apiKeys = Object.assign(S.apiKeys, JSON.parse(saved));
-    const prov = localStorage.getItem('air_ai_provider');
-    if (prov) S.aiProvider = prov;
-  } catch(e) { console.warn('Erro ao carregar chaves:', e); }
-  loadApiKeys();
+document.addEventListener('DOMContentLoaded', async () => {
+  // Carrega apenas o provedor do localStorage (não as chaves)
+  const prov = localStorage.getItem('air_ai_provider');
+  if (prov) S.aiProvider = prov;
+
+  // Carrega as chaves do servidor (assíncrono)
+  await loadApiKeys(); // garantindo que S.apiKeys esteja populado
+  fillApiFields();
 });
