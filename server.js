@@ -99,6 +99,34 @@ app.post('/proxy/deepseek', async (req, res) => {
   }
 });
 
+
+// ── Proxy: ElevenLabs TTS ────────────────────
+app.post('/proxy/elevenlabs/:voiceId', async (req, res) => {
+  const apiKey  = req.headers['xi-api-key'];
+  const voiceId = req.params.voiceId;
+  if (!apiKey) return res.status(400).json({ detail: { message: 'Chave ElevenLabs não enviada' } });
+  try {
+    const { default: fetch } = await import('node-fetch');
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method:  'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'xi-api-key':   apiKey,
+        'Accept':       'audio/mpeg',
+      },
+      body: JSON.stringify(req.body),
+    });
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      return res.status(response.status).json(data);
+    }
+    res.setHeader('Content-Type', 'audio/mpeg');
+    response.body.pipe(res);
+  } catch (err) {
+    console.error('[ElevenLabs]', err.message);
+    res.status(502).json({ detail: { message: 'Erro ao conectar com ElevenLabs: ' + err.message } });
+  }
+});
 app.listen(PORT, () => {
   console.log(`\n🎵 AIR Rádio rodando em http://localhost:${PORT}`);
   console.log('   Proxy de IA ativo — CORS resolvido!\n');
