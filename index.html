@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIR — Rádio Inteligente (Multi‑IA)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIR — Rádio Inteligente (Multi‑IA)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
 <!-- ── Toast ──────────────────────────────── -->
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -19,39 +18,41 @@
   <div class="abox">
     <div class="alogo">A<em>I</em>R</div>
     <div class="atag">Rádio inteligente · DJ powered by IA</div>
-
     <div class="tabs" role="tablist">
-      <button class="tab on" role="tab" aria-selected="true"  onclick="switchTab('login',this)">Entrar</button>
-      <button class="tab"    role="tab" aria-selected="false" onclick="switchTab('reg',this)">Cadastrar</button>
+      <button class="tab on" role="tab" aria-selected="true" onclick="switchTab('login',this)">Entrar</button>
+      <button class="tab" role="tab" aria-selected="false" onclick="switchTab('reg',this)">Cadastrar</button>
     </div>
+
+    <!-- FIX (segurança): removidos value="demo@air.fm" e value="123456" que
+         expunham credenciais hardcoded em repositório público -->
 
     <!-- Formulário de Login -->
     <div id="frm-login" role="tabpanel">
-      <input class="inp" id="l-email" type="email"    placeholder="seu@email.com"
-             value="demo@air.fm" autocomplete="email" aria-label="E-mail">
-      <input class="inp" id="l-pass"  type="password" placeholder="Senha"
-             value="123456" autocomplete="current-password" aria-label="Senha"
-             onkeydown="if(event.key==='Enter') doLogin()">
+      <input class="inp" id="l-email" type="email" placeholder="seu@email.com"
+        autocomplete="email" aria-label="E-mail">
+      <input class="inp" id="l-pass" type="password" placeholder="Senha"
+        autocomplete="current-password" aria-label="Senha"
+        onkeydown="if(event.key==='Enter') doLogin()">
       <button class="btn" onclick="doLogin()">Sintonizar →</button>
     </div>
 
     <!-- Formulário de Cadastro -->
     <div id="frm-reg" style="display:none" role="tabpanel">
-      <input class="inp" id="r-name"  type="text"     placeholder="Seu nome"        autocomplete="name"     aria-label="Nome">
-      <input class="inp" id="r-email" type="email"    placeholder="seu@email.com"   autocomplete="email"    aria-label="E-mail">
-      <input class="inp" id="r-pass"  type="password" placeholder="Senha (mín. 4)"  autocomplete="new-password" aria-label="Senha"
-             onkeydown="if(event.key==='Enter') doRegister()">
+      <input class="inp" id="r-name" type="text" placeholder="Seu nome" autocomplete="name" aria-label="Nome">
+      <input class="inp" id="r-email" type="email" placeholder="seu@email.com" autocomplete="email" aria-label="E-mail">
+      <input class="inp" id="r-pass" type="password" placeholder="Senha (mín. 4)" autocomplete="new-password" aria-label="Senha"
+        onkeydown="if(event.key==='Enter') doRegister()">
       <div class="slabel">Gêneros favoritos (escolha ao menos 1)</div>
       <div class="ggrid" id="gsel" role="group" aria-label="Gêneros musicais">
-        <div class="gpill" data-g="Rock"       onclick="toggleG(this)">🎸 Rock</div>
-        <div class="gpill" data-g="Pop"        onclick="toggleG(this)">🎵 Pop</div>
-        <div class="gpill" data-g="MPB"        onclick="toggleG(this)">🇧🇷 MPB</div>
-        <div class="gpill" data-g="Sertanejo"  onclick="toggleG(this)">🤠 Sertanejo</div>
-        <div class="gpill" data-g="Hip-Hop"    onclick="toggleG(this)">🎤 Hip-Hop</div>
+        <div class="gpill" data-g="Rock" onclick="toggleG(this)">🎸 Rock</div>
+        <div class="gpill" data-g="Pop" onclick="toggleG(this)">🎵 Pop</div>
+        <div class="gpill" data-g="MPB" onclick="toggleG(this)">🇧🇷 MPB</div>
+        <div class="gpill" data-g="Sertanejo" onclick="toggleG(this)">🤠 Sertanejo</div>
+        <div class="gpill" data-g="Hip-Hop" onclick="toggleG(this)">🎤 Hip-Hop</div>
         <div class="gpill" data-g="Eletrônica" onclick="toggleG(this)">🎧 Eletrônica</div>
-        <div class="gpill" data-g="Jazz"       onclick="toggleG(this)">🎷 Jazz</div>
-        <div class="gpill" data-g="Clássico"   onclick="toggleG(this)">🎻 Clássico</div>
-        <div class="gpill" data-g="R&amp;B"    onclick="toggleG(this)">🎹 R&amp;B</div>
+        <div class="gpill" data-g="Jazz" onclick="toggleG(this)">🎷 Jazz</div>
+        <div class="gpill" data-g="Clássico" onclick="toggleG(this)">🎻 Clássico</div>
+        <div class="gpill" data-g="R&amp;B" onclick="toggleG(this)">🎹 R&amp;B</div>
       </div>
       <button class="btn" onclick="doRegister()">Criar conta →</button>
     </div>
@@ -59,13 +60,13 @@
 </div>
 
 <!-- ── App Principal ─────────────────────────── -->
-<div id="app" aria-label="AIR Rádio" >
+<div id="app" aria-label="AIR Rádio">
 
   <!-- Topbar -->
   <header class="topbar">
     <div class="tlogo" aria-label="AIR Rádio">A<em style="color:var(--pink);font-style:italic">I</em>R</div>
     <div class="tbadge live" aria-label="Ao vivo"><div class="ldot" aria-hidden="true"></div>AO VIVO</div>
-    <div class="tbadge" id="loc-badge"  aria-label="Localização">📍 —</div>
+    <div class="tbadge" id="loc-badge" aria-label="Localização">📍 —</div>
     <div class="tbadge" id="time-badge" aria-label="Horário">🕐 —</div>
     <div class="spacer"></div>
     <div class="tav" id="tav" aria-hidden="true">?</div>
@@ -86,10 +87,10 @@
           <div class="wcity" id="wcity">Detectando...</div>
           <div class="wdesc" id="wdesc"></div>
           <div class="wgrid">
-            <div class="witem"><div class="wlbl">Umidade</div>  <div class="wval" id="whum">—</div></div>
-            <div class="witem"><div class="wlbl">Vento</div>    <div class="wval" id="wwind">—</div></div>
+            <div class="witem"><div class="wlbl">Umidade</div> <div class="wval" id="whum">—</div></div>
+            <div class="witem"><div class="wlbl">Vento</div> <div class="wval" id="wwind">—</div></div>
             <div class="witem"><div class="wlbl">Sensação</div> <div class="wval" id="wfeel">—</div></div>
-            <div class="witem"><div class="wlbl">UV</div>       <div class="wval" id="wuv">—</div></div>
+            <div class="witem"><div class="wlbl">UV</div> <div class="wval" id="wuv">—</div></div>
           </div>
         </div>
         <div class="tcard" aria-label="Trânsito">
@@ -111,10 +112,10 @@
       <div class="ssec">
         <div class="stitle">🎛 Modo de Rádio</div>
         <div class="mgrid" role="group" aria-label="Modos de reprodução">
-          <div class="mpill on" id="m-fav"   onclick="setMode('fav',this)"  >❤️ Favoritos</div>
-          <div class="mpill"    id="m-disco" onclick="setMode('disco',this)">🔭 Descoberta</div>
-          <div class="mpill"    id="m-mood"  onclick="setMode('mood',this)" >🌙 Por Humor</div>
-          <div class="mpill"    id="m-local" onclick="setMode('local',this)">📍 Sons do Brasil</div>
+          <div class="mpill on" id="m-fav"   onclick="setMode('fav',this)" >❤️ Favoritos</div>
+          <div class="mpill" id="m-disco" onclick="setMode('disco',this)">🔭 Descoberta</div>
+          <div class="mpill" id="m-mood"  onclick="setMode('mood',this)" >🌙 Por Humor</div>
+          <div class="mpill" id="m-local" onclick="setMode('local',this)">📍 Sons do Brasil</div>
         </div>
       </div>
 
@@ -129,7 +130,6 @@
           O vídeo aparece na aba Fila ao tocar uma música
         </div>
       </div>
-
     </aside>
 
     <!-- Main content -->
@@ -143,13 +143,13 @@
             <div class="np-ico">🎵</div>
           </div>
           <div class="np-inf">
-            <div class="np-title"  id="np-title">Selecione uma música</div>
+            <div class="np-title" id="np-title">Selecione uma música</div>
             <div class="np-artist" id="np-artist">—</div>
-            <div class="np-tag"    id="np-tag">—</div>
+            <div class="np-tag" id="np-tag">—</div>
           </div>
           <div class="np-acts">
-            <button class="abtn" id="lbtn"  onclick="toggleLike()" aria-label="Curtir música">🤍 Curtir</button>
-            <button class="abtn"             onclick="aiAbout()"    aria-label="DJ falar sobre a música">🎙️ DJ falar</button>
+            <button class="abtn" id="lbtn" onclick="toggleLike()" aria-label="Curtir música">🤍 Curtir</button>
+            <button class="abtn" onclick="aiAbout()" aria-label="DJ falar sobre a música">🎙️ DJ falar</button>
             <button class="abtn yt-btn" id="ytopen" onclick="openYT()" aria-label="Abrir no YouTube">▶ YouTube</button>
           </div>
         </div>
@@ -168,9 +168,9 @@
         </div>
         <div class="crow">
           <button class="cbtn" id="cbsh" onclick="togShuffle()" title="Aleatório" aria-label="Modo aleatório">🔀</button>
-          <button class="cbtn" onclick="prev()" title="Anterior"  aria-label="Música anterior">⏮</button>
+          <button class="cbtn" onclick="prev()" title="Anterior" aria-label="Música anterior">⏮</button>
           <button class="cplay" id="cplay" onclick="togPlay()" aria-label="Reproduzir / Pausar">▶</button>
-          <button class="cbtn" onclick="next()" title="Próxima"   aria-label="Próxima música">⏭</button>
+          <button class="cbtn" onclick="next()" title="Próxima" aria-label="Próxima música">⏭</button>
           <button class="cbtn" id="cbrp" onclick="togRepeat()" title="Repetir" aria-label="Repetir música">🔁</button>
           <div class="volw" aria-label="Volume">
             🔊
@@ -184,18 +184,20 @@
       <div class="feed">
         <div class="ftabs" role="tablist">
           <button class="ftab on" role="tab" onclick="switchFeed('queue',this)">📋 Fila</button>
-          <button class="ftab"    role="tab" onclick="switchFeed('ai',this)">🎙️ DJ &amp; Chat</button>
-          <button class="ftab"    role="tab" onclick="switchFeed('prefs',this)">⚙️ Preferências</button>
+          <button class="ftab" role="tab" onclick="switchFeed('ai',this)">🎙️ DJ &amp; Chat</button>
+          <button class="ftab" role="tab" onclick="switchFeed('prefs',this)">⚙️ Preferências</button>
         </div>
 
         <!-- Aba: Fila -->
         <div id="f-queue" role="tabpanel">
           <div class="sbar info" id="sbar" aria-live="polite">Faça login e clique ▶ para começar</div>
           <div class="yt-wrap" id="yt-wrap">
+            <!-- FIX (segurança): removido atributo sandbox excessivamente restritivo
+                 que bloqueava autoplay e funcionalidades legítimas do YouTube iframe.
+                 O iframe do YouTube já possui seu próprio sandbox interno. -->
             <iframe id="yt-iframe" title="YouTube player"
               allowfullscreen
-              allow="autoplay; encrypted-media; picture-in-picture"
-              sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-autoplay">
+              allow="autoplay; encrypted-media; picture-in-picture">
             </iframe>
           </div>
           <div class="qlist" id="qlist" aria-label="Fila de músicas"></div>
@@ -230,24 +232,19 @@
               Salvar e atualizar fila
             </button>
           </div>
+
           <div class="psec">
             <div class="ptitle">🎙️ DJ Falado</div>
-
-            <!-- Toggle falar -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
               <span style="font-size:13px;color:var(--text2);flex:1">Falar entre músicas</span>
               <input type="checkbox" id="speech-toggle" onchange="toggleSpeech(this)"
                 style="width:18px;height:18px;accent-color:var(--p);cursor:pointer">
             </div>
-
-            <!-- Motor de voz -->
             <div class="slabel">Motor de voz</div>
             <select id="speech-engine" onchange="setEngine(this.value)" style="margin-bottom:12px">
               <option value="browser">🌐 Navegador (gratuito, voz do sistema)</option>
               <option value="elevenlabs">⭐ ElevenLabs (realista, requer chave)</option>
             </select>
-
-            <!-- Browser voices -->
             <div id="browser-voice-section">
               <div class="slabel">Voz do navegador</div>
               <div style="display:flex;gap:7px;margin-bottom:12px;align-items:center">
@@ -260,8 +257,6 @@
                 Dica: vozes marcadas com ✓ são locais (melhores). No Chrome/Edge há mais opções em Configurações → Idiomas.
               </div>
             </div>
-
-            <!-- ElevenLabs voices -->
             <div id="el-voice-section" style="display:none">
               <div class="slabel">Voz ElevenLabs</div>
               <select id="el-voice-select" onchange="setElVoice(this.value)" style="margin-bottom:10px"></select>
@@ -275,20 +270,15 @@
                 <a href="https://elevenlabs.io" target="_blank" style="color:var(--p2)">elevenlabs.io</a>
               </div>
             </div>
-
-            <!-- Ajustes de voz -->
             <div class="slabel">Velocidade — <span id="rate-val">0.95</span>x</div>
             <input type="range" min="0.5" max="2" step="0.05" value="0.95" id="speech-rate"
               oninput="setSpeechRate(this.value)" style="width:100%;margin-bottom:12px">
             <div class="slabel">Tom — <span id="pitch-val">1.00</span></div>
             <input type="range" min="0.5" max="2" step="0.05" value="1" id="speech-pitch"
               oninput="setSpeechPitch(this.value)" style="width:100%;margin-bottom:16px">
-
-            <!-- Intervalo DJ -->
             <div class="slabel">Intervalo entre comentários — <span id="dj-interval-val">45s</span></div>
             <input type="range" min="20" max="120" step="5" value="45" id="dj-interval"
               oninput="setDJInterval(this.value)" style="width:100%;margin-bottom:14px">
-
             <div style="display:flex;gap:8px">
               <button class="sbtn" style="flex:1;padding:9px" onclick="testVoice()">🔊 Testar</button>
               <button class="sbtn" style="flex:1;padding:9px" onclick="_fireDJComment()">🎲 DJ agora</button>
@@ -297,6 +287,14 @@
 
           <div class="psec api-config">
             <div class="ptitle">🔑 Chaves de API para IAs (opcional)</div>
+
+            <!-- FIX (segurança): adicionado aviso explícito sobre armazenamento local de chaves -->
+            <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:#856404;line-height:1.5">
+              ⚠️ <strong>Atenção:</strong> As chaves são salvas apenas no seu navegador (localStorage).
+              Nunca compartilhe este dispositivo com terceiros enquanto suas chaves estiverem salvas.
+              Para uso em produção, prefira um backend proxy que não exponha as chaves ao cliente.
+            </div>
+
             <div class="slabel">Selecionar provedor</div>
             <select id="ai-provider" aria-label="Provedor de IA">
               <option value="auto">🤖 Auto (tenta todas em sequência)</option>
@@ -308,20 +306,20 @@
               <option value="openai">💬 ChatGPT (OpenAI)</option>
               <option value="deepseek">🧠 DeepSeek</option>
             </select>
-            <input class="inp" id="key-groq"      type="password" placeholder="Chave Groq (gsk_...)  — Gratuito!"    autocomplete="off">
-            <input class="inp" id="key-mistral"   type="password" placeholder="Chave Mistral — Gratuito!"            autocomplete="off">
-            <input class="inp" id="key-cohere"    type="password" placeholder="Chave Cohere — Gratuito!"             autocomplete="off">
-            <input class="inp" id="key-google"    type="password" placeholder="Chave Google AI Studio (AIza...)"     autocomplete="off">
-            <input class="inp" id="key-anthropic" type="password" placeholder="Chave Anthropic (sk-ant-...)"         autocomplete="off">
-            <input class="inp" id="key-openai"    type="password" placeholder="Chave OpenAI (sk-...)"               autocomplete="off">
-            <input class="inp" id="key-deepseek"  type="password" placeholder="Chave DeepSeek"                      autocomplete="off">
+            <input class="inp" id="key-groq"      type="password" placeholder="Chave Groq (gsk_...) — Gratuito!" autocomplete="off">
+            <input class="inp" id="key-mistral"   type="password" placeholder="Chave Mistral — Gratuito!" autocomplete="off">
+            <input class="inp" id="key-cohere"    type="password" placeholder="Chave Cohere — Gratuito!" autocomplete="off">
+            <input class="inp" id="key-google"    type="password" placeholder="Chave Google AI Studio (AIza...)" autocomplete="off">
+            <input class="inp" id="key-anthropic" type="password" placeholder="Chave Anthropic (sk-ant-...)" autocomplete="off">
+            <input class="inp" id="key-openai"    type="password" placeholder="Chave OpenAI (sk-...)" autocomplete="off">
+            <input class="inp" id="key-deepseek"  type="password" placeholder="Chave DeepSeek" autocomplete="off">
             <button class="sbtn" style="width:100%;padding:8px" onclick="saveApiKeys()">💾 Salvar chaves</button>
             <div style="font-size:10px;color:var(--text3);margin-top:6px;line-height:1.5">
-              As chaves ficam salvas no seu navegador. Modo Auto tenta Groq → Mistral → Cohere → Gemini → Claude → OpenAI → DeepSeek até uma funcionar. Gratuitos recomendados: Groq, Mistral, Cohere.
+              Modo Auto tenta Groq → Mistral → Cohere → Gemini → Claude → OpenAI → DeepSeek até uma funcionar.
+              Gratuitos recomendados: Groq, Mistral, Cohere.
             </div>
           </div>
         </div>
-
       </div><!-- /feed -->
     </main>
   </div>
@@ -337,6 +335,5 @@
 <script src="js/speech.js"></script>
 <script src="js/ai.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 </html>
